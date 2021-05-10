@@ -5,6 +5,26 @@
  */
 package View;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+
+import com.mindfusion.scheduling.Calendar;
+import com.mindfusion.scheduling.CalendarAdapter;
+import com.mindfusion.scheduling.ThemeType;
+import com.mindfusion.scheduling.model.Appointment;
+import com.mindfusion.scheduling.model.ItemEvent;
+import java.awt.Frame;
+import java.awt.Panel;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author vilyn
@@ -44,6 +64,7 @@ public class Menu extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -175,11 +196,25 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu9);
 
         jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-caixa-automático-16.png"))); // NOI18N
-        jMenu5.setText("Fluxos de caixa");
+        jMenu5.setText("Financeiro");
 
         jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-fluxo-de-caixa-16.png"))); // NOI18N
         jMenuItem13.setText("Abrir Fluxo de Caixa");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem13);
+
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-fluxo-de-caixa-16.png"))); // NOI18N
+        jMenuItem5.setText("Receitas e Despesas");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem5);
 
         jMenuBar1.add(jMenu5);
 
@@ -188,6 +223,11 @@ public class Menu extends javax.swing.JFrame {
 
         jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-calendário-16.png"))); // NOI18N
         jMenuItem15.setText("Abrir Calendário");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem15);
 
         jMenuBar1.add(jMenu7);
@@ -281,9 +321,73 @@ public class Menu extends javax.swing.JFrame {
         funcionario.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        Fluxo_Caixa fluxoCaixa = new Fluxo_Caixa();
+        fluxoCaixa.setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Receitas_Despesas receitasDespesas = new Receitas_Despesas();
+        receitasDespesas.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        Display display = new Display();
+        Shell shell = new Shell(display);
+        shell.setText("Agenda");
+        shell.setLayout(new RowLayout());
+        Composite composite = new Composite(shell, SWT.EMBEDDED | SWT.NO_BACKGROUND);
+        composite.setLayoutData(new RowData(1000, 500));
+
+        Frame frame = SWT_AWT.new_Frame(composite);
+        Panel panel = new Panel(new java.awt.BorderLayout());
+        frame.add(panel);
+
+        Calendar calendar = new Calendar();
+        calendar.setTheme(ThemeType.Light);
+        panel.add(calendar);
+
+        Button button = new Button(shell, SWT.NONE);
+        button.setText("Clique para criar um novo evento na agenda");
+        button.setLayoutData(new RowData(300, 40));
+
+        Button button1 = new Button(shell, SWT.NONE);
+        button1.setText("Número de compromissos: 0");
+        button1.setLayoutData(new RowData(300, 40));
+
+        Utility utility = new Utility(display, calendar, button1);
+
+        calendar.addCalendarListener(new CalendarAdapter() {
+            public void itemCreated(ItemEvent e) {
+                utility.updateButton();
+            }
+
+            public void itemDeleted(ItemEvent e) {
+                utility.updateButton();
+            }
+        });
+
+        //handle click on the button that
+        //creates items programmatically
+        button.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event e) {
+                switch (e.type) {
+                    case SWT.Selection:
+                        utility.updateProgress();
+                        break;
+                }
+            }
+        });
+
+        // run the SWT event loop
+        shell.open();
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        display.dispose();
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -316,6 +420,7 @@ public class Menu extends javax.swing.JFrame {
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
@@ -337,6 +442,52 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem9;
     // End of variables declaration//GEN-END:variables
+}
+
+class Utility {
+
+    private Button button;
+    private Calendar calendar;
+    private Display display;
+
+    public Utility(Display display, Calendar calendar, Button button) {
+        this.display = display;
+        this.calendar = calendar;
+        this.button = button;
+    }
+
+    public void updateProgress() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                // Here, we can safely update the GUI
+                // because we'll be called from the
+                // event dispatch thread
+                com.mindfusion.common.DateTime firstDate = calendar.getFirstVisibleDate();
+                com.mindfusion.common.DateTime oneWeek = firstDate.addDays(7);
+
+                Appointment app = new Appointment();
+                app.setStartTime(firstDate);
+                app.setEndTime(oneWeek);
+                app.setHeaderText("");
+                calendar.getSchedule().getItems().add(app);
+                updateButton();
+
+            }
+        });
+    }
+
+    public void updateButton() {
+        display.asyncExec(new Runnable() {
+            public void run() {
+                if (display.isDisposed()) {
+                    return;
+                }
+                button.setText("Número de compromissos: "
+                        + String.valueOf(calendar.getSchedule().getItems().size()));
+            }
+        });
+    }
 }

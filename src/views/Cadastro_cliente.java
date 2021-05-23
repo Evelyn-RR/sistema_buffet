@@ -255,7 +255,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:              
-        Novo_evento novo_evento = new Novo_evento();
+        Novo_evento novo_evento = new Novo_evento(null, true, null);
         novo_evento.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 

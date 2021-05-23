@@ -22,7 +22,7 @@ public class Menu extends javax.swing.JFrame {
      * Creates new form Menu
      */
     public Menu() {
-        Autenticacao login = new Autenticacao(null, true);
+        Login login = new Login(null, true);
         login.setVisible(true);
         usuarioLogado = login.getUsuarioAutenticado();
         if (!usuarioLogado.equals("")){

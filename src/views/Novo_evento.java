@@ -11,14 +11,14 @@ import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
 import entity.Cliente;
 import entity.Orcamento;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -51,7 +51,6 @@ public class Novo_evento extends javax.swing.JDialog {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        lblData = new javax.swing.JFormattedTextField();
         cmbLocal = new javax.swing.JComboBox<>();
         lblEndereco = new javax.swing.JTextField();
         lblHoraroi = new javax.swing.JFormattedTextField();
@@ -74,6 +73,7 @@ public class Novo_evento extends javax.swing.JDialog {
         cmbCliente = new javax.swing.JComboBox<>();
         cmbTipoEvento = new javax.swing.JComboBox<>();
         btnProximo = new javax.swing.JButton();
+        lblData = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItemIncluido = new javax.swing.JTable();
@@ -181,8 +181,6 @@ public class Novo_evento extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        lblData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-
         cmbLocal.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cmbLocal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Casa", "Chacará", "Clube", "Igreja", "Outros" }));
         cmbLocal.addActionListener(new java.awt.event.ActionListener() {
@@ -262,6 +260,8 @@ public class Novo_evento extends javax.swing.JDialog {
             }
         });
 
+        lblData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -287,9 +287,9 @@ public class Novo_evento extends javax.swing.JDialog {
                                     .addComponent(lblDescricao)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
+                                .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel5)
@@ -351,10 +351,10 @@ public class Novo_evento extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(lblHoraroi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -1183,8 +1183,10 @@ public class Novo_evento extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        Date date = Calendar.getInstance().getTime();
+        
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        
         if(objetoOrcamento == null) objetoOrcamento = new Orcamento();
 
         objetoOrcamento.setIdCliente(Integer.parseInt((cmbCliente.getSelectedItem())));
@@ -1192,8 +1194,16 @@ public class Novo_evento extends javax.swing.JDialog {
         objetoOrcamento.setConvidados(Integer.parseInt(lblNumeroConvidados.getText()));
         objetoOrcamento.setDuracao(Integer.parseInt(lblDias.getText()));
         objetoOrcamento.setLocalEvento(cmbLocal.getSelectedItem() + "");
-        objetoOrcamento.setDataHorario(dateFormat.format(lblData.getText()));
-        objetoOrcamento.setDataHorario(lblHoraroi.getText());
+        try {
+            objetoOrcamento.setDataHorario((Date)dateFormat.parse(lblData.getText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objetoOrcamento.setDataHorario((Date)timeFormat.parse(lblHoraroi.getText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
+        }
         objetoOrcamento.setEndereco(lblEndereco.getText());
         objetoOrcamento.setDescricao(lblDescricao.getText());
 

@@ -235,7 +235,7 @@ public class Produto extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Cadastro_produto  cadastro_produto = new  Cadastro_produto();
+        Cadastro_produto  cadastro_produto = new Cadastro_produto(null, true, null);
         cadastro_produto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

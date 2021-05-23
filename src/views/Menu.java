@@ -5,7 +5,10 @@
  */
 package views;
 
+import java.awt.Toolkit;
 import agenda.java.edu.avans.library.presentation.MainFrame;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -13,11 +16,19 @@ import agenda.java.edu.avans.library.presentation.MainFrame;
  */
 public class Menu extends javax.swing.JFrame {
 
+    private String usuarioLogado = "";
+    
     /**
      * Creates new form Menu
      */
     public Menu() {
-        initComponents();
+        Autenticacao login = new Autenticacao(null, true);
+        login.setVisible(true);
+        usuarioLogado = login.getUsuarioAutenticado();
+        if (!usuarioLogado.equals("")){
+            initComponents();
+            lblUsuarioLogado.setText("Usuário: " + usuarioLogado);
+        }
     }
 
     /**
@@ -29,7 +40,11 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        jToolBar1 = new javax.swing.JToolBar();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        lblUsuarioLogado = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        decoratedDesktopPane12 = new models.DecoratedDesktopPane1();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
@@ -55,17 +70,20 @@ public class Menu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal");
         setExtendedState(6);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 744, Short.MAX_VALUE)
-        );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
-        );
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.add(filler1);
+
+        lblUsuarioLogado.setBackground(new java.awt.Color(255, 255, 255));
+        lblUsuarioLogado.setText("Usuário:");
+        jToolBar1.add(lblUsuarioLogado);
+        jToolBar1.add(filler2);
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-novo-arquivo-16.png"))); // NOI18N
         jMenu1.setText("Cadastros");
@@ -229,14 +247,21 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(decoratedDesktopPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 454, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(decoratedDesktopPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
@@ -245,7 +270,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:        
-        Novo_evento novo_evento = new Novo_evento();
+        Novo_evento novo_evento = new Novo_evento(null, true, null);
         novo_evento.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -275,7 +300,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
         // TODO add your handling code here:
-        Cadastro_produto cadastro_produto = new Cadastro_produto();
+        Cadastro_produto cadastro_produto = new Cadastro_produto(null, true, null);
         cadastro_produto.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
@@ -316,6 +341,12 @@ public class Menu extends javax.swing.JFrame {
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         MainFrame mainFrame = new MainFrame();
     }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(JOptionPane.showConfirmDialog(this, "Deseja sair do programa?", "Atenção!",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        else setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -350,7 +381,9 @@ public class Menu extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
+    private models.DecoratedDesktopPane1 decoratedDesktopPane12;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu5;
@@ -372,5 +405,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblUsuarioLogado;
     // End of variables declaration//GEN-END:variables
 }

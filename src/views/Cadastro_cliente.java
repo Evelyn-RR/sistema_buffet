@@ -10,7 +10,7 @@ package views;
  * @author vilyn
  */
 public class Cadastro_cliente extends javax.swing.JFrame {
-
+  
     /**
      * Creates new form Cadastro_cliente
      */

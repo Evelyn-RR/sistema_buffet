@@ -294,7 +294,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
-        Cadastro_fornecedor cadastro_fornecedor = new Cadastro_fornecedor();
+        Cadastro_fornecedor cadastro_fornecedor = new Cadastro_fornecedor(null);
         cadastro_fornecedor.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
@@ -318,7 +318,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        Cadastro_funcionario cadastro_funcionario = new Cadastro_funcionario();
+        Cadastro_funcionario cadastro_funcionario = new Cadastro_funcionario(null, true, null);
         cadastro_funcionario.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 

@@ -1,12 +1,13 @@
 package dao;
 
-import java.io.Serializable;
+import entity.Produto;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import javax.persistence.*;
+import javax.persistence.criteria.AbstractQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import org.eclipse.persistence.sessions.Session;
+import javax.persistence.criteria.Root;
 
 /**
  * * * @author Moreno
@@ -73,6 +74,13 @@ public class GenericDAO<T> {
         return getEntityManager().createQuery(criteria).getResultList();
     }
 
+    public List<T> findByName(String tipo) {
+        Query query= getEntityManager().createNamedQuery("Produto.findByTipo");
+        tipo = "%"+tipo+"%";
+        query.setParameter("tipo",tipo);
+        return query.getResultList();
+    }
+    
     public T selecionarPorCodigo(int codigo) {
         return (T) getEntityManager().getReference(persistentClass, codigo);
     }

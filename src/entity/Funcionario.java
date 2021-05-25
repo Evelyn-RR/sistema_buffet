@@ -27,9 +27,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "Funcionario.findByIdFuncionario", query = "SELECT f FROM Funcionario f WHERE f.idFuncionario = :idFuncionario"),
     @NamedQuery(name = "Funcionario.findByNomeFuncionario", query = "SELECT f FROM Funcionario f WHERE f.nomeFuncionario = :nomeFuncionario"),
     @NamedQuery(name = "Funcionario.findByFuncao", query = "SELECT f FROM Funcionario f WHERE f.funcao = :funcao"),
-    @NamedQuery(name = "Funcionario.findBySalario", query = "SELECT f FROM Funcionario f WHERE f.salario = :salario"),
-    @NamedQuery(name = "Funcionario.findByQuantidade", query = "SELECT f FROM Funcionario f WHERE f.quantidade = :quantidade")})
+    @NamedQuery(name = "Funcionario.findBySalario", query = "SELECT f FROM Funcionario f WHERE f.salario = :salario")})
 public class Funcionario implements Serializable {
+
+    @Column(name = "celular")
+    private String celular;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,8 +48,6 @@ public class Funcionario implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salario")
     private Double salario;
-    @Column(name = "quantidade")
-    private Integer quantidade;
 
     public Funcionario() {
     }
@@ -94,14 +94,6 @@ public class Funcionario implements Serializable {
         this.salario = salario;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,6 +117,14 @@ public class Funcionario implements Serializable {
     @Override
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Funcionario[ idFuncionario=" + idFuncionario + " ]";
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
     
 }

@@ -26,12 +26,12 @@ import javax.persistence.Table;
     @NamedQuery(name = "Produto.findAll", query = "SELECT p FROM Produto p"),
     @NamedQuery(name = "Produto.findByIdProduto", query = "SELECT p FROM Produto p WHERE p.idProduto = :idProduto"),
     @NamedQuery(name = "Produto.findByNomeProduto", query = "SELECT p FROM Produto p WHERE p.nomeProduto = :nomeProduto"),
-    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo = :tipo"),
+    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo like :tipo"),
     @NamedQuery(name = "Produto.findByQtdEstoque", query = "SELECT p FROM Produto p WHERE p.qtdEstoque = :qtdEstoque"),
-    @NamedQuery(name = "Produto.findByValorProduto", query = "SELECT p FROM Produto p WHERE p.valorProduto = :valorProduto"),
-    @NamedQuery(name = "Produto.findByUltimoPagamento", query = "SELECT p FROM Produto p WHERE p.ultimoPagamento = :ultimoPagamento")})
+    @NamedQuery(name = "Produto.findByValorProduto", query = "SELECT p FROM Produto p WHERE p.valorProduto = :valorProduto")})
 public class Produto implements Serializable {
 
+   
     @Column(name = "unidade_medida")
     private String unidadeMedida;
 
@@ -50,8 +50,6 @@ public class Produto implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor_produto")
     private Double valorProduto;
-    @Column(name = "ultimo_pagamento")
-    private Double ultimoPagamento;
 
     public Produto() {
     }
@@ -100,14 +98,6 @@ public class Produto implements Serializable {
         this.valorProduto = valorProduto;
     }
 
-    public Double getUltimoPagamento() {
-        return ultimoPagamento;
-    }
-
-    public void setUltimoPagamento(Double ultimoPagamento) {
-        this.ultimoPagamento = ultimoPagamento;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -140,5 +130,5 @@ public class Produto implements Serializable {
     public void setUnidadeMedida(String unidadeMedida) {
         this.unidadeMedida = unidadeMedida;
     }
-    
 }
+

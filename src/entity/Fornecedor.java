@@ -26,10 +26,29 @@ import javax.persistence.Table;
     @NamedQuery(name = "Fornecedor.findAll", query = "SELECT f FROM Fornecedor f"),
     @NamedQuery(name = "Fornecedor.findByIdFornecdor", query = "SELECT f FROM Fornecedor f WHERE f.idFornecdor = :idFornecdor"),
     @NamedQuery(name = "Fornecedor.findByNomeFornecedor", query = "SELECT f FROM Fornecedor f WHERE f.nomeFornecedor = :nomeFornecedor"),
-    @NamedQuery(name = "Fornecedor.findByCnpj", query = "SELECT f FROM Fornecedor f WHERE f.cnpj = :cnpj"),
     @NamedQuery(name = "Fornecedor.findByEmailFornecedor", query = "SELECT f FROM Fornecedor f WHERE f.emailFornecedor = :emailFornecedor"),
     @NamedQuery(name = "Fornecedor.findByCelularFornecedor", query = "SELECT f FROM Fornecedor f WHERE f.celularFornecedor = :celularFornecedor")})
 public class Fornecedor implements Serializable {
+
+    @Column(name = "cpf_fornecedor")
+    private String cpfFornecedor;
+    @Column(name = "cep_fornecedor")
+    private String cepFornecedor;
+    @Column(name = "celular_fornecedor")
+    private String celularFornecedor;
+
+    @Column(name = "produto_fornecido")
+    private String produtoFornecido;
+    @Column(name = "valor_do_produto")
+    private String valorDoProduto;
+    @Column(name = "cidade_fornecedor")
+    private String cidadeFornecedor;
+    @Column(name = "estado_fornecedor")
+    private String estadoFornecedor;
+    @Column(name = "endereco_fornecedor")
+    private String enderecoFornecedor;
+    @Column(name = "observacao_fornecedor")
+    private String observacaoFornecedor;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,14 +59,9 @@ public class Fornecedor implements Serializable {
     @Basic(optional = false)
     @Column(name = "nome_fornecedor")
     private String nomeFornecedor;
-    @Column(name = "cnpj")
-    private String cnpj;
     @Basic(optional = false)
     @Column(name = "email_fornecedor")
     private String emailFornecedor;
-    @Basic(optional = false)
-    @Column(name = "celular_fornecedor")
-    private String celularFornecedor;
 
     public Fornecedor() {
     }
@@ -78,15 +92,7 @@ public class Fornecedor implements Serializable {
     public void setNomeFornecedor(String nomeFornecedor) {
         this.nomeFornecedor = nomeFornecedor;
     }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
+    
     public String getEmailFornecedor() {
         return emailFornecedor;
     }
@@ -126,6 +132,78 @@ public class Fornecedor implements Serializable {
     @Override
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Fornecedor[ idFornecdor=" + idFornecdor + " ]";
+    }
+
+    public String getProdutoFornecido() {
+        return produtoFornecido;
+    }
+
+    public void setProdutoFornecido(String produtoFornecido) {
+        this.produtoFornecido = produtoFornecido;
+    }
+
+    public String getValorDoProduto() {
+        return valorDoProduto;
+    }
+
+    public void setValorDoProduto(String valorDoProduto) {
+        this.valorDoProduto = valorDoProduto;
+    }
+
+    public String getCidadeFornecedor() {
+        return cidadeFornecedor;
+    }
+
+    public void setCidadeFornecedor(String cidadeFornecedor) {
+        this.cidadeFornecedor = cidadeFornecedor;
+    }
+
+    public String getEstadoFornecedor() {
+        return estadoFornecedor;
+    }
+
+    public void setEstadoFornecedor(String estadoFornecedor) {
+        this.estadoFornecedor = estadoFornecedor;
+    }
+
+    public String getEnderecoFornecedor() {
+        return enderecoFornecedor;
+    }
+
+    public void setEnderecoFornecedor(String enderecoFornecedor) {
+        this.enderecoFornecedor = enderecoFornecedor;
+    }
+
+    public String getObservacaoFornecedor() {
+        return observacaoFornecedor;
+    }
+
+    public void setObservacaoFornecedor(String observacaoFornecedor) {
+        this.observacaoFornecedor = observacaoFornecedor;
+    }
+
+    public String getCpfFornecedor() {
+        return cpfFornecedor;
+    }
+
+    public void setCpfFornecedor(String cpfFornecedor) {
+        this.cpfFornecedor = cpfFornecedor;
+    }
+
+    public String getCepFornecedor() {
+        return cepFornecedor;
+    }
+
+    public void setCepFornecedor(String cepFornecedor) {
+        this.cepFornecedor = cepFornecedor;
+    }
+
+    public String getCelFornecedor() {
+        return celularFornecedor;
+    }
+
+    public void setCelFornecedor(String celFornecedor) {
+        this.celularFornecedor = celFornecedor;
     }
     
 }

@@ -5,6 +5,11 @@
  */
 package views;
 
+import dao.OrcamentoDAO;
+import java.util.List;
+import javax.swing.table.TableModel;
+import utils.TableModelCreator;
+
 /**
  *
  * @author vilyn
@@ -14,6 +19,9 @@ public class Evento extends javax.swing.JFrame {
     /**
      * Creates new form Evento
      */
+    
+    private int idSelecionado;
+    
     public Evento() {
         initComponents();
     }
@@ -33,10 +41,10 @@ public class Evento extends javax.swing.JFrame {
         jTextField5 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton7 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        tblEvento = new javax.swing.JTable();
+        btnImprimir = new javax.swing.JButton();
+        btnRegistros = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Evento");
@@ -59,8 +67,8 @@ public class Evento extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblEvento.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        tblEvento.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -68,19 +76,29 @@ public class Evento extends javax.swing.JFrame {
                 "Nome do cliente", "Endereço", "Data do Evento", "Hora", "Tipo de Evento", "N° de convidados"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblEvento);
 
-        jButton7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-enviar-para-a-impressora-16.png"))); // NOI18N
-        jButton7.setText("Imprimir relatório");
+        btnImprimir.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-enviar-para-a-impressora-16.png"))); // NOI18N
+        btnImprimir.setText("Imprimir relatório");
 
-        jButton15.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
-        jButton15.setText("Registros de pagamentos");
+        btnRegistros.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnRegistros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
+        btnRegistros.setText("Registros de pagamentos");
+        btnRegistros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrosActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-editar-16.png"))); // NOI18N
-        jButton2.setText("Editar");
+        btnEditar.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-editar-16.png"))); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,11 +123,11 @@ public class Evento extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(99, 99, 99)
-                        .addComponent(jButton7)
+                        .addComponent(btnImprimir)
                         .addGap(70, 70, 70)
-                        .addComponent(jButton15)
+                        .addComponent(btnRegistros)
                         .addGap(72, 72, 72)
-                        .addComponent(jButton2)))
+                        .addComponent(btnEditar)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -127,9 +145,9 @@ public class Evento extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton2)
-                    .addComponent(jButton15))
+                    .addComponent(btnImprimir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnRegistros))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -152,6 +170,29 @@ public class Evento extends javax.swing.JFrame {
         eventoFinalizado.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (idSelecionado > 0) {
+            entity.Orcamento orcamento = new OrcamentoDAO().selecionarPorCodigo(idSelecionado);
+            Novo_evento tela = new Novo_evento(null, true, orcamento);
+            tela.setVisible(true);
+            atualizarTabela();
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrosActionPerformed
+
+    private void atualizarTabela() {
+        try {
+            List<entity.Orcamento> listaEventos = new OrcamentoDAO().selecionarTodos();
+            TableModel tableModelEventos = TableModelCreator.createTableModel(entity.Orcamento.class, listaEventos, null);
+            tblEvento.setModel(tableModelEventos);
+        } catch (Exception ex) {
+
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -188,15 +229,15 @@ public class Evento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnRegistros;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTable tblEvento;
     // End of variables declaration//GEN-END:variables
 }

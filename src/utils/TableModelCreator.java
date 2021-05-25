@@ -5,6 +5,7 @@
  */
 package utils;
 
+import entity.Produto;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -81,5 +82,5 @@ public class TableModelCreator {
         }
     }
 
-
+    
 }

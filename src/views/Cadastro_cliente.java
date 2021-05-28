@@ -7,32 +7,27 @@ package views;
 
 import dao.ClienteDAO;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author vilyn
  */
-public class Cadastro_cliente extends javax.swing.JFrame {
-  
+public class Cadastro_cliente extends javax.swing.JDialog {
+
     /**
      * Creates new form Cadastro_cliente
      */
-     
-        
     private entity.Cliente objetoCliente;
-      
-     
-     public Cadastro_cliente(entity.Cliente objetoCliente) {
+
+    public Cadastro_cliente(java.awt.Frame parent, boolean modal, entity.Cliente objetoCliente) {
+        super(parent, modal);
         this.objetoCliente = objetoCliente;
         initComponents();
     }
-     
-     
+
     public Cadastro_cliente() {
         initComponents();
     }
-
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,7 +50,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        txtnumdoc = new javax.swing.JTextField();
+        txtRG = new javax.swing.JTextField();
         txtCEP = new javax.swing.JTextField();
         cmbEstado = new javax.swing.JComboBox<>();
         txtCidade = new javax.swing.JTextField();
@@ -73,6 +68,11 @@ public class Cadastro_cliente extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Cliente");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("Nome:");
@@ -106,7 +106,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
 
         txtNome.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
-        txtnumdoc.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtRG.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         txtCEP.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
@@ -207,7 +207,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtnumdoc, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txtRG, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +249,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)
-                        .addComponent(txtnumdoc, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtRG, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -312,7 +312,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
         }
         objetoCliente.setNomeCliente(txtNome.getText());
         objetoCliente.setCpfCliente(txtCEP.getText());
-        objetoCliente.setRgCliente(txtnumdoc.getText());
+        objetoCliente.setRgCliente(txtRG.getText());
         objetoCliente.setCelularCliente(txtCelular.getText());
         objetoCliente.setDataDeNasc(txtDatadenasc.getText());
         objetoCliente.setEmailCliente(txtEmail.getText());
@@ -321,16 +321,19 @@ public class Cadastro_cliente extends javax.swing.JFrame {
         objetoCliente.setEnderecoCliente(txtEndereco.getText());
         objetoCliente.setEstadoCliente((String) cmbEstado.getSelectedItem());
         objetoCliente.setObservacaoCliente(txtobservaco.getText());
-        
-        if(objetoCliente == null) new ClienteDAO().inserir(objetoCliente);
-        else new ClienteDAO().editar(objetoCliente);
-        JOptionPane.showMessageDialog(null, "Cliente Criado", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+
+        if (objetoCliente == null) {
+            new ClienteDAO().inserir(objetoCliente);
+        } else {
+            new ClienteDAO().editar(objetoCliente);
+        }
+        JOptionPane.showMessageDialog(null, "Salvo com sucesso", "Atenção", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
+
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -347,10 +350,26 @@ public class Cadastro_cliente extends javax.swing.JFrame {
         txtDatadenasc.setText("");
         txtEmail.setText("");
         txtEndereco.setText("");
-        txtnumdoc.setText("");
+        txtRG.setText("");
         txtobservaco.setText("");
         cmbEstado.setSelectedIndex(0);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        if(objetoCliente != null){
+            txtCEP.setText(objetoCliente.getCepCliente());
+            txtCelular.setText(objetoCliente.getCelularCliente());
+            txtCidade.setText(objetoCliente.getCidadeCliente());
+            txtCpf.setText(objetoCliente.getCpfCliente());
+            txtDatadenasc.setText(objetoCliente.getDataDeNasc());
+            txtEmail.setText(objetoCliente.getEmailCliente());
+            txtEndereco.setText(objetoCliente.getEnderecoCliente());
+            txtNome.setText(objetoCliente.getNomeCliente());
+            txtobservaco.setText(objetoCliente.getObservacaoCliente());
+            txtRG.setText(objetoCliente.getRgCliente());
+            cmbEstado.setSelectedItem(objetoCliente.getEstadoCliente());
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -382,7 +401,13 @@ public class Cadastro_cliente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Cadastro_cliente().setVisible(true);
+                Cadastro_cliente dialog = new Cadastro_cliente(new javax.swing.JFrame(), true, null);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
             }
         });
     }
@@ -413,7 +438,7 @@ public class Cadastro_cliente extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtnumdoc;
+    private javax.swing.JTextField txtRG;
     private javax.swing.JTextField txtobservaco;
     // End of variables declaration//GEN-END:variables
 }

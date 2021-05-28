@@ -270,7 +270,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:        
-        Novo_evento novo_evento = new Novo_evento(null, true, null);
+        Novo_evento novo_evento = new Novo_evento(null, true, null, null, null);
         novo_evento.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -294,7 +294,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
-        Cadastro_fornecedor cadastro_fornecedor = new Cadastro_fornecedor(null);
+        Cadastro_fornecedor cadastro_fornecedor = new Cadastro_fornecedor(null, true, null);
         cadastro_fornecedor.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 

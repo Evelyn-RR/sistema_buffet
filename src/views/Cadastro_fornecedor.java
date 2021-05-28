@@ -12,19 +12,16 @@ import javax.swing.JOptionPane;
  *
  * @author vilyn
  */
-public class Cadastro_fornecedor extends javax.swing.JFrame {
+public class Cadastro_fornecedor extends javax.swing.JDialog {
 
     /**
      * Creates new form Cadastro_fornecedor
      */
     private entity.Fornecedor objetoFornecedor;
-    public Cadastro_fornecedor(entity.Fornecedor objetoFornecedor) {
+    public Cadastro_fornecedor(java.awt.Frame parent, boolean modal, entity.Fornecedor objetoFornecedor) {
+        super(parent, modal);
         this.objetoFornecedor = objetoFornecedor;
         initComponents();
-    }
-
-    private Cadastro_fornecedor() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -66,6 +63,11 @@ public class Cadastro_fornecedor extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de fornecedor");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel5.setText("CEP:");
@@ -306,7 +308,7 @@ public class Cadastro_fornecedor extends javax.swing.JFrame {
        
         if(objetoFornecedor == null) new FornecedorDAO().inserir(objetoFornecedor);
         else new FornecedorDAO().editar(objetoFornecedor);
-        JOptionPane.showMessageDialog(null, "Fornecedor Criado", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Salvo com sucesso", "Atenção", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -314,6 +316,22 @@ public class Cadastro_fornecedor extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        if(objetoFornecedor != null){
+            txtCEP.setText(objetoFornecedor.getCepFornecedor());
+            txtCNPJ.setText(objetoFornecedor.getCpfFornecedor());
+            txtCelular.setText(objetoFornecedor.getCelFornecedor());
+            txtCidade.setText(objetoFornecedor.getCidadeFornecedor());
+            txtEmail.setText(objetoFornecedor.getEmailFornecedor());
+            txtEndereco.setText(objetoFornecedor.getEnderecoFornecedor());
+            txtNome.setText(objetoFornecedor.getNomeFornecedor());
+            txtObservacao.setText(objetoFornecedor.getObservacaoFornecedor());
+            txtProdutoServico.setText(objetoFornecedor.getProdutoFornecido());
+            txtValorProduto.setText(objetoFornecedor.getValorDoProduto());
+            cmbESTADO.setSelectedItem(objetoFornecedor.getEstadoFornecedor());
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -345,7 +363,14 @@ public class Cadastro_fornecedor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Cadastro_fornecedor().setVisible(true);
+                Cadastro_fornecedor dialog = new Cadastro_fornecedor(new javax.swing.JFrame(), true, null);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

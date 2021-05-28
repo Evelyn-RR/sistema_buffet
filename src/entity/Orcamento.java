@@ -5,7 +5,10 @@
  */
 package entity;
 
+import entity.Funcionario;
+import entity.Produto;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -13,8 +16,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,9 +34,6 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Orcamento.findAll", query = "SELECT o FROM Orcamento o"),
     @NamedQuery(name = "Orcamento.findByIdCliente", query = "SELECT o FROM Orcamento o WHERE o.idCliente = :idCliente"),
-    @NamedQuery(name = "Orcamento.findByIdProduto", query = "SELECT o FROM Orcamento o WHERE o.idProduto = :idProduto"),
-    @NamedQuery(name = "Orcamento.findByIdFuncionario", query = "SELECT o FROM Orcamento o WHERE o.idFuncionario = :idFuncionario"),
-    @NamedQuery(name = "Orcamento.findByIdLancamento", query = "SELECT o FROM Orcamento o WHERE o.idLancamento = :idLancamento"),
     @NamedQuery(name = "Orcamento.findByIdOrcamento", query = "SELECT o FROM Orcamento o WHERE o.idOrcamento = :idOrcamento"),
     @NamedQuery(name = "Orcamento.findByTipo", query = "SELECT o FROM Orcamento o WHERE o.tipo = :tipo"),
     @NamedQuery(name = "Orcamento.findByConvidados", query = "SELECT o FROM Orcamento o WHERE o.convidados = :convidados"),
@@ -48,12 +51,6 @@ public class Orcamento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "id_cliente")
     private Integer idCliente;
-    @Column(name = "id_produto")
-    private Integer idProduto;
-    @Column(name = "id_funcionario")
-    private Integer idFuncionario;
-    @Column(name = "id_lancamento")
-    private Integer idLancamento;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -76,16 +73,21 @@ public class Orcamento implements Serializable {
     private String descricao;
     @Column(name = "duracao")
     private Integer duracao;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor_servico")
-    private Double valorServico;
+    private Long valorServico;
     @Column(name = "valor_entrada")
-    private Double valorEntrada;
+    private Long valorEntrada;
     @Column(name = "valor_final")
-    private Double valorFinal;
+    private Long valorFinal;
     @Column(name = "deconto")
-    private Double deconto;
+    private Long deconto;
+    @OneToMany(mappedBy = "orcamento")
+    private Collection<Produto> produtoCollection;
+    @OneToMany(mappedBy = "fkEquipeOrcamento")
+    private Collection<Funcionario> funcionarioCollection;
 
+
+    
     public Orcamento() {
     }
 
@@ -105,30 +107,6 @@ public class Orcamento implements Serializable {
 
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public Integer getIdProduto() {
-        return idProduto;
-    }
-
-    public void setIdProduto(Integer idProduto) {
-        this.idProduto = idProduto;
-    }
-
-    public Integer getIdFuncionario() {
-        return idFuncionario;
-    }
-
-    public void setIdFuncionario(Integer idFuncionario) {
-        this.idFuncionario = idFuncionario;
-    }
-
-    public Integer getIdLancamento() {
-        return idLancamento;
-    }
-
-    public void setIdLancamento(Integer idLancamento) {
-        this.idLancamento = idLancamento;
     }
 
     public Integer getIdOrcamento() {
@@ -195,36 +173,52 @@ public class Orcamento implements Serializable {
         this.duracao = duracao;
     }
 
-    public Double getValorServico() {
+    public Long getValorServico() {
         return valorServico;
     }
 
-    public void setValorServico(Double valorServico) {
+    public void setValorServico(Long valorServico) {
         this.valorServico = valorServico;
     }
 
-    public Double getValorEntrada() {
+    public Long getValorEntrada() {
         return valorEntrada;
     }
 
-    public void setValorEntrada(Double valorEntrada) {
+    public void setValorEntrada(Long valorEntrada) {
         this.valorEntrada = valorEntrada;
     }
 
-    public Double getValorFinal() {
+    public Long getValorFinal() {
         return valorFinal;
     }
 
-    public void setValorFinal(Double valorFinal) {
+    public void setValorFinal(Long valorFinal) {
         this.valorFinal = valorFinal;
     }
 
-    public Double getDeconto() {
+    public Long getDeconto() {
         return deconto;
     }
 
-    public void setDeconto(Double deconto) {
+    public void setDeconto(Long deconto) {
         this.deconto = deconto;
+    }
+
+    public Collection<Produto> getProdutoCollection() {
+        return produtoCollection;
+    }
+
+    public void setProdutoCollection(Collection<Produto> produtoCollection) {
+        this.produtoCollection = produtoCollection;
+    }
+
+    public Collection<Funcionario> getFuncionarioCollection() {
+        return funcionarioCollection;
+    }
+
+    public void setFuncionarioCollection(Collection<Funcionario> funcionarioCollection) {
+        this.funcionarioCollection = funcionarioCollection;
     }
 
     @Override

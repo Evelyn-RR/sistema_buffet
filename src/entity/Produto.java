@@ -12,6 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -26,14 +29,17 @@ import javax.persistence.Table;
     @NamedQuery(name = "Produto.findAll", query = "SELECT p FROM Produto p"),
     @NamedQuery(name = "Produto.findByIdProduto", query = "SELECT p FROM Produto p WHERE p.idProduto = :idProduto"),
     @NamedQuery(name = "Produto.findByNomeProduto", query = "SELECT p FROM Produto p WHERE p.nomeProduto = :nomeProduto"),
-    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo like :tipo"),
+    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo = :tipo"),
     @NamedQuery(name = "Produto.findByQtdEstoque", query = "SELECT p FROM Produto p WHERE p.qtdEstoque = :qtdEstoque"),
+    @NamedQuery(name = "Produto.findByUnidadeMedida", query = "SELECT p FROM Produto p WHERE p.unidadeMedida = :unidadeMedida"),
     @NamedQuery(name = "Produto.findByValorProduto", query = "SELECT p FROM Produto p WHERE p.valorProduto = :valorProduto")})
 public class Produto implements Serializable {
 
-   
-    @Column(name = "unidade_medida")
-    private String unidadeMedida;
+    @JoinColumns({
+        @JoinColumn(name = "fk_produto_orcamento", referencedColumnName = "id_orcamento"),
+        @JoinColumn(name = "fk_produto_orcamento", referencedColumnName = "id_orcamento")})
+    @ManyToOne
+    private Orcamento orcamento;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,6 +53,8 @@ public class Produto implements Serializable {
     private String tipo;
     @Column(name = "qtd_estoque")
     private Integer qtdEstoque;
+    @Column(name = "unidade_medida")
+    private String unidadeMedida;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor_produto")
     private Double valorProduto;
@@ -90,12 +98,28 @@ public class Produto implements Serializable {
         this.qtdEstoque = qtdEstoque;
     }
 
+    public String getUnidadeMedida() {
+        return unidadeMedida;
+    }
+
+    public void setUnidadeMedida(String unidadeMedida) {
+        this.unidadeMedida = unidadeMedida;
+    }
+
     public Double getValorProduto() {
         return valorProduto;
     }
 
     public void setValorProduto(Double valorProduto) {
         this.valorProduto = valorProduto;
+    }
+
+    public Orcamento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(Orcamento orcamento) {
+        this.orcamento = orcamento;
     }
 
     @Override
@@ -122,13 +146,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Produto[ idProduto=" + idProduto + " ]";
     }
-
-    public String getUnidadeMedida() {
-        return unidadeMedida;
-    }
-
-    public void setUnidadeMedida(String unidadeMedida) {
-        this.unidadeMedida = unidadeMedida;
-    }
+   
 }
-

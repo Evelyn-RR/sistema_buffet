@@ -12,6 +12,8 @@ import dao.ProdutoDAO;
 import entity.Cliente;
 import entity.Orcamento;
 import entity.Produto;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,10 +46,14 @@ public class Novo_evento extends javax.swing.JDialog {
      * Creates new form NewJFrame
      */
     private Orcamento objetoOrcamento;
+    private Produto produtoSelecionado;
+    private entity.Cliente clienteSelecionado;
     private int idSelecionado;
 
-    public Novo_evento(java.awt.Frame parent, boolean modal, Orcamento objetoOrcamento) {
+    public Novo_evento(java.awt.Frame parent, boolean modal, Orcamento objetoOrcamento, entity.Cliente clienteSelecionado, Produto produtoSelecionado) {
         super(parent, modal);
+        this.produtoSelecionado = produtoSelecionado;
+        this.clienteSelecionado = clienteSelecionado;
         this.objetoOrcamento = objetoOrcamento;
         initComponents();
     }
@@ -65,7 +71,6 @@ public class Novo_evento extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         cmbLocal = new javax.swing.JComboBox<>();
         lblEndereco = new javax.swing.JTextField();
-        lblHoraroi = new javax.swing.JFormattedTextField();
         lblDescricao = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -85,7 +90,8 @@ public class Novo_evento extends javax.swing.JDialog {
         cmbCliente = new javax.swing.JComboBox<>();
         cmbTipoEvento = new javax.swing.JComboBox<>();
         btnProximo = new javax.swing.JButton();
-        lblData = new javax.swing.JFormattedTextField();
+        lblHoraroi = new javax.swing.JTextField();
+        lblData1 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItemIncluido = new javax.swing.JTable();
@@ -191,15 +197,8 @@ public class Novo_evento extends javax.swing.JDialog {
 
         cmbLocal.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cmbLocal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Casa", "Chacará", "Clube", "Igreja", "Outros" }));
-        cmbLocal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbLocalActionPerformed(evt);
-            }
-        });
 
         lblEndereco.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-
-        lblHoraroi.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
 
         lblDescricao.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
@@ -268,7 +267,9 @@ public class Novo_evento extends javax.swing.JDialog {
             }
         });
 
-        lblData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
+        lblHoraroi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+
+        lblData1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -295,9 +296,7 @@ public class Novo_evento extends javax.swing.JDialog {
                                     .addComponent(lblDescricao)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(153, 153, 153)
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel5)
@@ -333,6 +332,11 @@ public class Novo_evento extends javax.swing.JDialog {
                         .addComponent(jLabel11)
                         .addGap(451, 451, 451)))
                 .addContainerGap(184, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(205, 205, 205)
+                    .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(564, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,9 +364,8 @@ public class Novo_evento extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(lblHoraroi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblHoraroi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -376,7 +379,12 @@ public class Novo_evento extends javax.swing.JDialog {
                     .addComponent(btnCancelar)
                     .addComponent(btnLimpar)
                     .addComponent(btnProximo))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(274, 274, 274)
+                    .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(289, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Dados Evento", jPanel1);
@@ -388,7 +396,7 @@ public class Novo_evento extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Nome", "Tipo", "Preço", "Quantidade"
+
             }
         ));
         jScrollPane2.setViewportView(tblItemIncluido);
@@ -451,12 +459,15 @@ public class Novo_evento extends javax.swing.JDialog {
         jLabel21.setText("Preço Final:");
 
         txtNomeProduto.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtNomeProduto.setEnabled(false);
 
         txtTipoProduto.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtTipoProduto.setEnabled(false);
 
         txtValorProd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         txtUnidadeProd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtUnidadeProd.setEnabled(false);
 
         txtPrecoFinalProd.setEditable(false);
         txtPrecoFinalProd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -1173,17 +1184,19 @@ public class Novo_evento extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         atualizarTabelaProduto();
         atualizarTabelaEquipe();
         atualizarComboCliente();
+
         if (objetoOrcamento != null) {
-            cmbCliente.setSelectedItem(objetoOrcamento.getIdCliente());
+            //cmbCliente.setSelectedItem(objetoOrcamento.getCliente());
             cmbTipoEvento.setSelectedItem(objetoOrcamento.getTipo());
             lblNumeroConvidados.setText(objetoOrcamento.getConvidados() + "");
             lblDias.setText(objetoOrcamento.getDuracao() + "");
             cmbLocal.setSelectedItem(objetoOrcamento.getLocalEvento());
-            lblData.setText(objetoOrcamento.getDataHorario() + "");
+            lblHoraroi.setText(objetoOrcamento.getDataHorario() + "");
             lblHoraroi.setText(objetoOrcamento.getDataHorario() + "");
             lblEndereco.setText(objetoOrcamento.getEndereco());
             lblDescricao.setText(objetoOrcamento.getDescricao());
@@ -1194,21 +1207,23 @@ public class Novo_evento extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = dateFormat.parse(lblHoraroi.getText() + " " + lblHoraroi.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         if (objetoOrcamento == null) {
             objetoOrcamento = new Orcamento();
         }
 
-        objetoOrcamento.setIdCliente(Integer.parseInt((String) cmbCliente.getSelectedItem()));
+        //objetoOrcamento.setCliente((entity.Cliente) cmbCliente.getSelectedItem());
         objetoOrcamento.setTipo(cmbTipoEvento.getSelectedItem() + "");
         objetoOrcamento.setConvidados(Integer.parseInt(lblNumeroConvidados.getText()));
         objetoOrcamento.setDuracao(Integer.parseInt(lblDias.getText()));
         objetoOrcamento.setLocalEvento(cmbLocal.getSelectedItem() + "");
-        try {
-            objetoOrcamento.setDataHorario((Date) dateFormat.parse(lblData.getText() + " " + lblHoraroi.getText()));
-        } catch (ParseException ex) {
-            Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        objetoOrcamento.setDataHorario(date);
         objetoOrcamento.setEndereco(lblEndereco.getText());
         objetoOrcamento.setDescricao(lblDescricao.getText());
 
@@ -1246,10 +1261,6 @@ public class Novo_evento extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void cmbLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLocalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbLocalActionPerformed
-
     private void tblItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblItemMouseClicked
         JTable tabela = (JTable) evt.getSource();
         int linha = tabela.rowAtPoint(evt.getPoint());
@@ -1265,11 +1276,6 @@ public class Novo_evento extends javax.swing.JDialog {
         txtTipoProduto.setText(produto.getTipo());
         txtValorProd.setText(produto.getValorProduto().toString());
         txtUnidadeProd.setText(produto.getUnidadeMedida());
-
-        /*double preco = Double.parseDouble(txtValorProd.getText());
-        int qtd = Integer.parseInt(txtQtdProd.getText());
-        txtPrecoFinalProd.setText(preco * qtd + "");
-        super.update(this.getGraphics());*/
     }//GEN-LAST:event_tblItemMouseClicked
 
     private void tblFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFuncionarioMouseClicked
@@ -1292,8 +1298,24 @@ public class Novo_evento extends javax.swing.JDialog {
     }//GEN-LAST:event_tblFuncionarioMouseClicked
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tblItemIncluido.getModel();
-        model.addRow(new Object[]{txtNomeProduto.getText(), txtTipoProduto.getText(), txtValorProd.getText(), txtQtdProd.getText()});
+//        DefaultTableModel model = (DefaultTableModel) tblItemIncluido.getModel();
+//        model.addRow(new Object[]{txtNomeProduto.getText(), txtTipoProduto.getText(), txtValorProd.getText(), txtQtdProd.getText()});
+        if (idSelecionado > 0) {
+            if (produtoSelecionado == null) {
+                produtoSelecionado = new entity.Produto();
+            }
+            Orcamento orcamento = new OrcamentoDAO().selecionarPorCodigo(idSelecionado);
+            int subEstoque = Integer.parseInt(txtQtdProd.getText());
+
+            produtoSelecionado.setOrcamento(orcamento);
+            produtoSelecionado.setQtdEstoque(subEstoque - produtoSelecionado.getQtdEstoque());
+
+            if (produtoSelecionado == null) {
+                new ProdutoDAO().inserir(produtoSelecionado);
+            } else {
+                new ProdutoDAO().editar(produtoSelecionado);
+            }
+        }
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void cmbAlimenticioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAlimenticioActionPerformed
@@ -1345,12 +1367,17 @@ public class Novo_evento extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbMaterialActionPerformed
 
     private void atualizarComboCliente() {
-        try {
-            List<Cliente> listaCliente = new ClienteDAO().selecionarTodos();
-            cmbCliente.setModel(new DefaultComboBoxModel<Cliente>(listaCliente.toArray(new Cliente[listaCliente.size()])));
-        } catch (Exception ex) {
+        if (clienteSelecionado != null) {
 
+        } else {
+            try {
+                List<entity.Cliente> listaCliente = new ClienteDAO().selecionarTodos();
+                cmbCliente.setModel(new DefaultComboBoxModel<entity.Cliente>(listaCliente.toArray(new entity.Cliente[listaCliente.size()])));
+            } catch (Exception ex) {
+
+            }
         }
+
     }
 
     private void atualizarTabelaProduto() {
@@ -1372,6 +1399,8 @@ public class Novo_evento extends javax.swing.JDialog {
 
         }
     }
+
+ 
 
     /**
      * @param args the command line arguments
@@ -1404,7 +1433,7 @@ public class Novo_evento extends javax.swing.JDialog {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Novo_evento dialog = new Novo_evento(new javax.swing.JFrame(), true, null);
+                Novo_evento dialog = new Novo_evento(new javax.swing.JFrame(), true, null, null, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -1498,11 +1527,11 @@ public class Novo_evento extends javax.swing.JDialog {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JFormattedTextField lblData;
+    private javax.swing.JTextField lblData1;
     private javax.swing.JTextField lblDescricao;
     private javax.swing.JTextField lblDias;
     private javax.swing.JTextField lblEndereco;
-    private javax.swing.JFormattedTextField lblHoraroi;
+    private javax.swing.JTextField lblHoraroi;
     private javax.swing.JTextField lblNumeroConvidados;
     private javax.swing.JTable table;
     private javax.swing.JTable tblFuncIncluido;

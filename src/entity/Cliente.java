@@ -33,6 +33,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Cliente.findByEmailCliente", query = "SELECT c FROM Cliente c WHERE c.emailCliente = :emailCliente")})
 public class Cliente implements Serializable {
 
+    @Column(name = "produtos")
+    private String produtos;
+
     @Column(name = "cep_cliente")
     private String cepCliente;
     @Column(name = "cidade_cliente")
@@ -158,7 +161,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "agenda.java.edu.avans.library.businesslogic.Cliente[ idCliente=" + idCliente + " ]";
+        return idCliente + " - " + nomeCliente;
     }
 
     public String getCepCliente() {
@@ -199,6 +202,14 @@ public class Cliente implements Serializable {
 
     public void setObservacaoCliente(String observacaoCliente) {
         this.observacaoCliente = observacaoCliente;
+    }
+
+    public String getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(String produtos) {
+        this.produtos = produtos;
     }
     
 }

@@ -33,7 +33,6 @@ import javax.persistence.TemporalType;
 @Table(name = "orcamento")
 @NamedQueries({
     @NamedQuery(name = "Orcamento.findAll", query = "SELECT o FROM Orcamento o"),
-    @NamedQuery(name = "Orcamento.findByIdCliente", query = "SELECT o FROM Orcamento o WHERE o.idCliente = :idCliente"),
     @NamedQuery(name = "Orcamento.findByIdOrcamento", query = "SELECT o FROM Orcamento o WHERE o.idOrcamento = :idOrcamento"),
     @NamedQuery(name = "Orcamento.findByTipo", query = "SELECT o FROM Orcamento o WHERE o.tipo = :tipo"),
     @NamedQuery(name = "Orcamento.findByConvidados", query = "SELECT o FROM Orcamento o WHERE o.convidados = :convidados"),
@@ -49,8 +48,7 @@ import javax.persistence.TemporalType;
 public class Orcamento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Column(name = "id_cliente")
-    private Integer idCliente;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -85,9 +83,10 @@ public class Orcamento implements Serializable {
     private Collection<Produto> produtoCollection;
     @OneToMany(mappedBy = "fkEquipeOrcamento")
     private Collection<Funcionario> funcionarioCollection;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
-
-    
     public Orcamento() {
     }
 
@@ -101,12 +100,12 @@ public class Orcamento implements Serializable {
         this.convidados = convidados;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public Cliente getIdCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setIdCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Integer getIdOrcamento() {
@@ -245,5 +244,5 @@ public class Orcamento implements Serializable {
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Orcamento[ idOrcamento=" + idOrcamento + " ]";
     }
-    
+
 }

@@ -50,9 +50,6 @@ public class Funcionario implements Serializable {
     private Double salario;
     @Column(name = "celular")
     private String celular;
-    @JoinColumn(name = "fk_equipe_orcamento", referencedColumnName = "id_orcamento")
-    @ManyToOne
-    private Orcamento fkEquipeOrcamento;
 
     public Funcionario() {
     }
@@ -107,14 +104,6 @@ public class Funcionario implements Serializable {
         this.celular = celular;
     }
 
-    public Orcamento getFkEquipeOrcamento() {
-        return fkEquipeOrcamento;
-    }
-
-    public void setFkEquipeOrcamento(Orcamento fkEquipeOrcamento) {
-        this.fkEquipeOrcamento = fkEquipeOrcamento;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,5 +128,5 @@ public class Funcionario implements Serializable {
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Funcionario[ idFuncionario=" + idFuncionario + " ]";
     }
-    
 }
+

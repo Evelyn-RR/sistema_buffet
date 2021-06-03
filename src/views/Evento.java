@@ -5,10 +5,28 @@
  */
 package views;
 
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Table;
+import dao.GenericDAO;
 import dao.OrcamentoDAO;
+import dao.PacoteDAO;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import utils.TableModelCreator;
+import utils.pdf.Footer;
+import utils.pdf.Header;
 
 /**
  *
@@ -36,7 +54,6 @@ public class Evento extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -45,14 +62,16 @@ public class Evento extends javax.swing.JFrame {
         btnImprimir = new javax.swing.JButton();
         btnRegistros = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        btnExcluir = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Evento");
-
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-        jLabel5.setText("Lista de Eventos Cadastrados");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-detetive-16.png"))); // NOI18N
@@ -75,14 +94,24 @@ public class Evento extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome do cliente", "Endereço", "Data do Evento", "Hora", "Tipo de Evento", "N° de convidados"
+
             }
         ));
+        tblEvento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEventoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEvento);
 
         btnImprimir.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-enviar-para-a-impressora-16.png"))); // NOI18N
         btnImprimir.setText("Imprimir relatório");
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
 
         btnRegistros.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnRegistros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
@@ -103,23 +132,38 @@ public class Evento extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        btnExcluir.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-cancelar-16.png"))); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
             }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        });
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+        jLabel7.setText("Lista de Eventos Cadastrados");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(btnRegistros)
+                        .addGap(52, 52, 52)
+                        .addComponent(btnImprimir)
+                        .addGap(47, 47, 47)
+                        .addComponent(btnEditar)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnExcluir))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(30, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -129,32 +173,16 @@ public class Evento extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(88, 88, 88))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(btnImprimir)
-                        .addGap(70, 70, 70)
-                        .addComponent(btnRegistros)
-                        .addGap(72, 72, 72)
-                        .addComponent(btnEditar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(50, 50, 50)
+                    .addComponent(jLabel7)
+                    .addContainerGap(437, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(87, 87, 87)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -166,10 +194,14 @@ public class Evento extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImprimir)
                     .addComponent(btnEditar)
+                    .addComponent(btnExcluir)
                     .addComponent(btnRegistros))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(56, 56, 56)
+                    .addComponent(jLabel7)
+                    .addContainerGap(445, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -195,7 +227,7 @@ public class Evento extends javax.swing.JFrame {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (idSelecionado > 0) {
             entity.Orcamento orcamento = new OrcamentoDAO().selecionarPorCodigo(idSelecionado);
-            Novo_evento tela = new Novo_evento(null, true, orcamento, null, null);
+            Novo_evento tela = new Novo_evento(null, true, orcamento, null, null, null, null);
             tela.setVisible(true);
             atualizarTabela();
         }
@@ -205,13 +237,153 @@ public class Evento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegistrosActionPerformed
 
+    private void tblEventoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventoMouseClicked
+        JTable tabela = (JTable) evt.getSource();
+        int linha = tabela.rowAtPoint(evt.getPoint());
+        
+        for (int i = 0; i < tabela.getModel().getColumnCount(); i++) {
+            String nomeColuna = tabela.getModel().getColumnName(i);
+            if (nomeColuna.trim().equals("Id Orcamento")) {
+                idSelecionado = Integer.parseInt(tabela.getValueAt(linha, i) + "");
+                btnEditar.setEnabled(true);
+                btnExcluir.setEnabled(true);
+                break;
+            }
+        }
+        
+//        atualizarTabelaProd();
+        
+    }//GEN-LAST:event_tblEventoMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            OrcamentoDAO orcamentodao = new OrcamentoDAO();
+            entity.Orcamento orcamento = orcamentodao.selecionarPorCodigo(idSelecionado);
+            orcamentodao.excluir(orcamento);
+            atualizarTabela();
+            JOptionPane.showMessageDialog(this, "ExcluÍdo com sucesso", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        atualizarTabela();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        String caminho = selecionarPasta();
+        if (!caminho.equals("")) {
+            if(gerarPDF(caminho, "evento")) abrirPDF(caminho, "evento");
+            else JOptionPane.showMessageDialog(this, "Erro ao gerar PDF", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+//        Novo_evento ob = new Novo_evento(null, true, null, null, null, null, null);
+//        DefaultTableModel model = (DefaultTableModel) tblProdutos1.getModel();
+//
+//        for (int i = ob.getLinhas(); i > 0 ; i--, idSelecionado--) {
+//            entity.Pacote pacote = new PacoteDAO().selecionarPorCodigo(idSelecionado);
+//            model.addRow(new Object[]{pacote.getNomeProduto(), pacote.getQtdProduto()});
+//        }
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
+//    private void atualizarTabelaProd() {
+//        entity.Orcamento objetoOrcamento = null;       
+//        try {
+//            List<entity.Pacote> listaPacotes = objetoOrcamento.getPacotes();
+//            TableModel tableModelPacotes = TableModelCreator.createTableModel(entity.Pacote.class, listaPacotes, null);
+//            tblProdutos1.setModel(tableModelPacotes);
+//        } catch (Exception ex) {
+//
+//        }
+//    }
+    
+        private void abrirPDF(String caminho, String nomeArquivoPDF){
+        try {
+            File arquivo = new File(caminho + "/" + nomeArquivoPDF + ".pdf");
+            Desktop.getDesktop().open(arquivo);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Arquivo não encontrado", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private boolean gerarPDF(String caminho, String nomeArquivoPDF) {
+        try {
+            PdfWriter writer = new PdfWriter(caminho + "/" + nomeArquivoPDF + ".pdf");
+            PdfDocument pdf = new PdfDocument(writer);
+            pdf.setTagged();
+            pdf.setDefaultPageSize(PageSize.A4);
+
+            Document documento = new Document(pdf);
+            documento.setMargins(93, 36, 55, 36);
+
+            Header header = new Header("Listagem de Eventos");
+            Footer footer = new Footer();
+            
+            pdf.addEventHandler(PdfDocumentEvent.START_PAGE, header);
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, footer);
+            
+            /*Paragraph titulo = new Paragraph("Listagem dos Produtos");
+            titulo.setBold();
+            titulo.setFontSize(15);
+            titulo.setTextAlignment(TextAlignment.CENTER);*/
+
+            Table tabela = new Table(8);
+            tabela.addCell("Id");
+            tabela.addCell("Cliente");
+            tabela.addCell("Tipo");
+            tabela.addCell("Convidados");
+            tabela.addCell("Local");
+            tabela.addCell("Endereço");
+            tabela.addCell("Descrição");
+            tabela.addCell("Valor Final");
+            for (int i = 0; i < tblEvento.getRowCount(); i++) {
+                String id = tblEvento.getValueAt(i, 7).toString();
+                String cliente = tblEvento.getValueAt(i, 6).toString();
+                String tipo = tblEvento.getValueAt(i, 11).toString();
+                String convidados = tblEvento.getValueAt(i, 0).toString();
+                String local = tblEvento.getValueAt(i, 9).toString();
+                String endereco = tblEvento.getValueAt(i, 5).toString();
+                String descricao = tblEvento.getValueAt(i, 3).toString();
+                String varlorFinal = tblEvento.getValueAt(i, 12).toString();
+                tabela.addCell(id);
+                tabela.addCell(cliente);
+                tabela.addCell(tipo);
+                tabela.addCell(convidados);
+                tabela.addCell(local);
+                tabela.addCell(endereco);
+                tabela.addCell(descricao);
+                tabela.addCell(varlorFinal);
+            }
+            
+            //documento.add(titulo);
+            documento.add(tabela);
+            footer.writeTotal(pdf);
+            documento.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Evento.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
     private void atualizarTabela() {
         try {
+//            GenericDAO g = new GenericDAO<Object>();
+//            List<entity.Orcamento> list = g.getEntityManager().createQuery("SELECT o.tipo, o.duracao FROM Orcamento o where o.id = 3").getResultList();
             List<entity.Orcamento> listaEventos = new OrcamentoDAO().selecionarTodos();
             TableModel tableModelEventos = TableModelCreator.createTableModel(entity.Orcamento.class, listaEventos, null);
             tblEvento.setModel(tableModelEventos);
         } catch (Exception ex) {
 
+        }
+    }
+    
+    private String selecionarPasta() {
+        try {
+            JFileChooser arquivo = new JFileChooser();
+            arquivo.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            arquivo.showSaveDialog(this);
+            return arquivo.getSelectedFile().getPath();
+        } catch (Exception ex) {
+            return "";
         }
     }
     
@@ -252,15 +424,14 @@ public class Evento extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnRegistros;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTable tblEvento;
     // End of variables declaration//GEN-END:variables

@@ -223,7 +223,7 @@ public class Clientes extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (idselecionado > 0) {
             Cliente cliente = new ClienteDAO().selecionarPorCodigo(idselecionado);
-            Novo_evento novo_evento = new Novo_evento(null, true, null, cliente, null);
+            Novo_evento novo_evento = new Novo_evento(null, true, null, cliente, null, null, null);
             novo_evento.setVisible(true);
         }
 

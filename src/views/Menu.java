@@ -17,6 +17,7 @@ import javax.swing.WindowConstants;
 public class Menu extends javax.swing.JFrame {
 
     private String usuarioLogado = "";
+    private entity.Orcamento objetoOrcamento = null;
     
     /**
      * Creates new form Menu
@@ -269,8 +270,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:        
-        Novo_evento novo_evento = new Novo_evento(null, true, null, null, null);
+
+        Novo_evento novo_evento = new Novo_evento(null, true, null, null, null, null, null);
         novo_evento.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 

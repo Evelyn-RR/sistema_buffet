@@ -41,21 +41,21 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"2021", "Jan", null, null, null},
-                {"2021", "Fev", null, null, null},
-                {"2021", "Mar", null, null, null},
-                {"2021", "Abr", null, null, null},
-                {"2021", "Mai", null, null, null},
-                {"2021", "Jun", null, null, null},
-                {"2021", "Jul", null, null, null},
-                {"2021", "Ago", null, null, null},
-                {"2021", "Set", null, null, null},
-                {"2021", "Out", null, null, null},
-                {"2021", "Nov", null, null, null},
-                {"2021", "Dez", null, null, null}
+                {"2021", "Jan", null, null, null, null},
+                {"2021", "Fev", null, null, null, null},
+                {"2021", "Mar", null, null, null, null},
+                {"2021", "Abr", null, null, null, null},
+                {"2021", "Mai", null, null, null, null},
+                {"2021", "Jun", null, null, null, null},
+                {"2021", "Jul", null, null, null, null},
+                {"2021", "Ago", null, null, null, null},
+                {"2021", "Set", null, null, null, null},
+                {"2021", "Out", null, null, null, null},
+                {"2021", "Nov", null, null, null, null},
+                {"2021", "Dez", null, null, null, null}
             },
             new String [] {
-                "Ano", "Mês", "Receita", "Despesa", "Resultado"
+                "Ano", "Mês", "Receita", "Despesa", "Resultado", "Média"
             }
         ));
         jTable1.setRowHeight(25);
@@ -103,7 +103,7 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
                     .addComponent(jButton7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

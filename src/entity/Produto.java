@@ -29,17 +29,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "Produto.findAll", query = "SELECT p FROM Produto p"),
     @NamedQuery(name = "Produto.findByIdProduto", query = "SELECT p FROM Produto p WHERE p.idProduto = :idProduto"),
     @NamedQuery(name = "Produto.findByNomeProduto", query = "SELECT p FROM Produto p WHERE p.nomeProduto = :nomeProduto"),
-    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo = :tipo"),
+    @NamedQuery(name = "Produto.findByTipo", query = "SELECT p FROM Produto p WHERE p.tipo like :tipo"),
     @NamedQuery(name = "Produto.findByQtdEstoque", query = "SELECT p FROM Produto p WHERE p.qtdEstoque = :qtdEstoque"),
     @NamedQuery(name = "Produto.findByUnidadeMedida", query = "SELECT p FROM Produto p WHERE p.unidadeMedida = :unidadeMedida"),
     @NamedQuery(name = "Produto.findByValorProduto", query = "SELECT p FROM Produto p WHERE p.valorProduto = :valorProduto")})
 public class Produto implements Serializable {
-
-    @JoinColumns({
-        @JoinColumn(name = "fk_produto_orcamento", referencedColumnName = "id_orcamento"),
-        @JoinColumn(name = "fk_produto_orcamento", referencedColumnName = "id_orcamento")})
-    @ManyToOne
-    private Orcamento orcamento;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -114,14 +108,6 @@ public class Produto implements Serializable {
         this.valorProduto = valorProduto;
     }
 
-    public Orcamento getOrcamento() {
-        return orcamento;
-    }
-
-    public void setOrcamento(Orcamento orcamento) {
-        this.orcamento = orcamento;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -146,5 +132,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "agenda.java.edu.avans.library.businesslogic.Produto[ idProduto=" + idProduto + " ]";
     }
-   
+
 }

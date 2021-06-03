@@ -40,6 +40,31 @@ public class GenericDAO<T> {
         }
     }
 
+    public void persist(T entity) {
+        EntityTransaction tx = getEntityManager().getTransaction();
+        try {
+            tx.begin();
+            getEntityManager().persist(entity);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            tx.rollback();
+        } finally {
+            close();
+        }
+    }
+    
+    public void commit(T entity) {
+        EntityTransaction tx = getEntityManager().getTransaction();
+        try {
+            tx.commit();
+        } catch (Throwable t) {
+            t.printStackTrace();
+            tx.rollback();
+        } finally {
+            close();
+        }
+    }
+    
     public void editar(T entity) {
         EntityTransaction tx = getEntityManager().getTransaction();
         try {
@@ -78,6 +103,19 @@ public class GenericDAO<T> {
         Query query= getEntityManager().createNamedQuery("Produto.findByTipo");
         tipo = "%"+tipo+"%";
         query.setParameter("tipo",tipo);
+        return query.getResultList();
+    }
+    
+    public List<T> findOrcamento(String tipo) {
+        Query query= getEntityManager().createNamedQuery("Orcamento.findOrcamento");
+        tipo = "%"+tipo+"%";
+        query.setParameter("tipo",tipo);
+        return query.getResultList();
+    }
+    
+    public List<T> findPacotes(entity.Orcamento orcamentoId) {
+        Query query= getEntityManager().createNamedQuery("Pacote.findByOrcamentoId");
+        query.setParameter("orcamentoId",orcamentoId);
         return query.getResultList();
     }
     

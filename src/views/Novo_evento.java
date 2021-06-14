@@ -8,23 +8,18 @@ package views;
 import dao.ClienteDAO;
 import dao.PacoteDAO;
 import dao.FuncionarioDAO;
-import static dao.ManagerFactory.getEntityManager;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
-import entity.Evento;
 import entity.Orcamento;
 import entity.Produto;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityTransaction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -48,6 +43,8 @@ public class Novo_evento extends javax.swing.JDialog {
     private entity.Lancamento objetoLancamento;
     private DefaultTableModel modelProd = null;
     private DefaultTableModel modelFunc = null;
+    private DefaultTableModel modelLanc = null;
+    private double equipe = 0;
     private int linhas;
     private int idSelecionado;
 
@@ -63,6 +60,10 @@ public class Novo_evento extends javax.swing.JDialog {
 
     public int getLinhas() {
         return linhas;
+    }
+
+    public double getEquipe() {
+        return equipe;
     }
 
     /**
@@ -97,8 +98,8 @@ public class Novo_evento extends javax.swing.JDialog {
         cmbCliente = new javax.swing.JComboBox<>();
         cmbTipoEvento = new javax.swing.JComboBox<>();
         btnProximo = new javax.swing.JButton();
-        lblHoraroi = new javax.swing.JTextField();
-        lblData1 = new javax.swing.JTextField();
+        lblData1 = new javax.swing.JFormattedTextField();
+        lblHoraroi = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItemIncluido = new javax.swing.JTable();
@@ -122,7 +123,6 @@ public class Novo_evento extends javax.swing.JDialog {
         txtUnidadeProd = new javax.swing.JTextField();
         txtPrecoFinalProd = new javax.swing.JTextField();
         txtQtdProd = new javax.swing.JTextField();
-        btnSomar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblItem = new javax.swing.JTable();
         jLabel18 = new javax.swing.JLabel();
@@ -154,7 +154,6 @@ public class Novo_evento extends javax.swing.JDialog {
         txtValorDesconto = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         txtValorServico = new javax.swing.JTextField();
-        btnCalcular = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
@@ -182,17 +181,17 @@ public class Novo_evento extends javax.swing.JDialog {
         txtDescontoParcela = new javax.swing.JTextField();
         txtValorParcela = new javax.swing.JTextField();
         txtTotalParcela = new javax.swing.JTextField();
-        btnCalcular1 = new javax.swing.JButton();
-        txtDataVencimento = new javax.swing.JTextField();
+        btnFatura = new javax.swing.JButton();
         btnInserir = new javax.swing.JButton();
         txtValorEntrada = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        btnFatura = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         cmbOrcamento = new javax.swing.JComboBox<>();
         cmbCliente1 = new javax.swing.JComboBox<>();
+        txtDataVencimento = new javax.swing.JFormattedTextField();
+        cmbId = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Novo Evento");
@@ -276,9 +275,17 @@ public class Novo_evento extends javax.swing.JDialog {
             }
         });
 
-        lblHoraroi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        try {
+            lblData1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
-        lblData1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        try {
+            lblHoraroi.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -305,8 +312,8 @@ public class Novo_evento extends javax.swing.JDialog {
                                     .addComponent(lblDescricao)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel8)
                                 .addGap(12, 12, 12)
@@ -371,8 +378,8 @@ public class Novo_evento extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel8)
-                    .addComponent(lblHoraroi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHoraroi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -386,7 +393,7 @@ public class Novo_evento extends javax.swing.JDialog {
                     .addComponent(btnCancelar)
                     .addComponent(btnLimpar)
                     .addComponent(btnProximo))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Dados Evento", jPanel1);
@@ -475,13 +482,9 @@ public class Novo_evento extends javax.swing.JDialog {
         txtPrecoFinalProd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         txtQtdProd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-
-        btnSomar.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        btnSomar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-mais-16.png"))); // NOI18N
-        btnSomar.setText("Somar");
-        btnSomar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSomarActionPerformed(evt);
+        txtQtdProd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtQtdProdKeyReleased(evt);
             }
         });
 
@@ -492,39 +495,33 @@ public class Novo_evento extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTipoProduto))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtQtdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPrecoFinalProd, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnIncluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTipoProduto))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel20)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtQtdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel21)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPrecoFinalProd, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnSomar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnIncluir)))
-                        .addContainerGap())
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 4, Short.MAX_VALUE)
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtValorProd, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtUnidadeProd, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52))))
+                        .addComponent(txtUnidadeProd, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,8 +544,7 @@ public class Novo_evento extends javax.swing.JDialog {
                     .addComponent(btnIncluir)
                     .addComponent(jLabel21)
                     .addComponent(txtPrecoFinalProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtQtdProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSomar))
+                    .addComponent(txtQtdProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -856,18 +852,19 @@ public class Novo_evento extends javax.swing.JDialog {
         txtValorEquipe.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         txtValorDesconto.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtValorDesconto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtValorDescontoKeyReleased(evt);
+            }
+        });
 
         jLabel22.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel22.setText("Valor do serviço:");
 
         txtValorServico.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-
-        btnCalcular.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        btnCalcular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-17389-0-73153-replay-left-44-arrows-16.png"))); // NOI18N
-        btnCalcular.setText("Calcular");
-        btnCalcular.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalcularActionPerformed(evt);
+        txtValorServico.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtValorServicoKeyReleased(evt);
             }
         });
 
@@ -914,18 +911,14 @@ public class Novo_evento extends javax.swing.JDialog {
                     .addComponent(jLabel26)
                     .addComponent(jLabel43))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnCalcular)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnProxOrc))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel23)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtValorServico)
-                        .addComponent(txtValorItens)
-                        .addComponent(txtValorEquipe)
-                        .addComponent(txtValorDesconto)
-                        .addComponent(txtValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtValorServico)
+                    .addComponent(txtValorItens)
+                    .addComponent(txtValorEquipe)
+                    .addComponent(txtValorDesconto)
+                    .addComponent(txtValorFinal, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(btnProxOrc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(291, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -953,11 +946,9 @@ public class Novo_evento extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43)
                     .addComponent(txtValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProxOrc, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(btnProxOrc, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Orçamento", jPanel2);
@@ -971,19 +962,19 @@ public class Novo_evento extends javax.swing.JDialog {
 
         jLabel34.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel34.setText("Nome do cliente:");
-        jPanel6.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 122, -1, -1));
+        jPanel6.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         jLabel35.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel35.setText("Data de vencimento:");
-        jPanel6.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 169, -1, -1));
+        jPanel6.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         jLabel36.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel36.setText("Valor original:");
-        jPanel6.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(314, 169, -1, -1));
+        jPanel6.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, -1, -1));
 
         txtValorOriginal.setEditable(false);
         txtValorOriginal.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jPanel6.add(txtValorOriginal, new org.netbeans.lib.awtextra.AbsoluteConstraints(404, 165, 149, -1));
+        jPanel6.add(txtValorOriginal, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 180, 90, -1));
 
         jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -1009,26 +1000,36 @@ public class Novo_evento extends javax.swing.JDialog {
         cmbPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "À vista", "Parcelado" }));
 
         txtParcelas.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtParcelas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtParcelasKeyReleased(evt);
+            }
+        });
 
         txtSubtotal.setEditable(false);
         txtSubtotal.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtSubtotal.setEnabled(false);
 
         txtDescontoParcela.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtDescontoParcela.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDescontoParcelaKeyReleased(evt);
+            }
+        });
 
         txtValorParcela.setEditable(false);
         txtValorParcela.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtValorParcela.setEnabled(false);
 
-        txtTotalParcela.setEditable(false);
         txtTotalParcela.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtTotalParcela.setEnabled(false);
 
-        btnCalcular1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        btnCalcular1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-17389-0-73153-replay-left-44-arrows-16.png"))); // NOI18N
-        btnCalcular1.setText("Calcular");
-        btnCalcular1.addActionListener(new java.awt.event.ActionListener() {
+        btnFatura.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnFatura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
+        btnFatura.setText("Gerar Fatura de Pagamento");
+        btnFatura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalcular1ActionPerformed(evt);
+                btnFaturaActionPerformed(evt);
             }
         });
 
@@ -1037,41 +1038,44 @@ public class Novo_evento extends javax.swing.JDialog {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel37)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel42)
-                                    .addComponent(jLabel38)
-                                    .addComponent(jLabel39))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtParcelas)
-                                    .addComponent(txtSubtotal)
-                                    .addComponent(txtDescontoParcela)))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel40)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtValorParcela, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel41)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTotalParcela, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCalcular1)))))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnFatura, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGap(21, 21, 21)
+                            .addComponent(jLabel37)
+                            .addGap(18, 18, 18)
+                            .addComponent(cmbPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel42)
+                                        .addComponent(jLabel38)
+                                        .addComponent(jLabel39))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtParcelas)
+                                        .addComponent(txtSubtotal)
+                                        .addComponent(txtDescontoParcela)))
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jLabel40)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtValorParcela, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jLabel41)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(txtTotalParcela)))
+                                    .addGap(0, 2, Short.MAX_VALUE))))))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
+                .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37)
                     .addComponent(cmbPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1091,18 +1095,16 @@ public class Novo_evento extends javax.swing.JDialog {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtValorParcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel40))
-                .addGap(26, 26, 26)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel41)
-                    .addComponent(txtTotalParcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCalcular1))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(txtTotalParcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnFatura)
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 8, 280, -1));
-
-        txtDataVencimento.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jPanel6.add(txtDataVencimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 165, 149, -1));
 
         btnInserir.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnInserir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
@@ -1112,14 +1114,14 @@ public class Novo_evento extends javax.swing.JDialog {
                 btnInserirActionPerformed(evt);
             }
         });
-        jPanel6.add(btnInserir, new org.netbeans.lib.awtextra.AbsoluteConstraints(315, 208, -1, -1));
+        jPanel6.add(btnInserir, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 230, 180, -1));
 
         txtValorEntrada.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jPanel6.add(txtValorEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 212, 149, -1));
+        jPanel6.add(txtValorEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 149, 30));
 
         jLabel54.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel54.setText("Valor de entrada:");
-        jPanel6.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 216, -1, -1));
+        jPanel6.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, -1, -1));
 
         table.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         table.setModel(new javax.swing.table.DefaultTableModel(
@@ -1133,17 +1135,7 @@ public class Novo_evento extends javax.swing.JDialog {
         table.setRowHeight(30);
         jScrollPane7.setViewportView(table);
 
-        jPanel6.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 343, 820, 164));
-
-        btnFatura.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        btnFatura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-recibo-em-dinheiro-16.png"))); // NOI18N
-        btnFatura.setText("Gerar Fatura de Pagamento");
-        btnFatura.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFaturaActionPerformed(evt);
-            }
-        });
-        jPanel6.add(btnFatura, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 292, 240, -1));
+        jPanel6.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 820, 164));
 
         btnSalvar.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-ok-16.png"))); // NOI18N
@@ -1155,15 +1147,30 @@ public class Novo_evento extends javax.swing.JDialog {
         });
         jPanel6.add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 520, -1, -1));
 
+        cmbOrcamento.setEditable(true);
         cmbOrcamento.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cmbOrcamento.setToolTipText("");
         cmbOrcamento.setEnabled(false);
-        jPanel6.add(cmbOrcamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 350, 47, -1));
+        jPanel6.add(cmbOrcamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 370, 80, -1));
 
+        cmbCliente1.setEditable(true);
         cmbCliente1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cmbCliente1.setToolTipText("");
         cmbCliente1.setEnabled(false);
-        jPanel6.add(cmbCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 117, 405, -1));
+        jPanel6.add(cmbCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 350, -1));
+
+        try {
+            txtDataVencimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtDataVencimento.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtDataVencimento.setToolTipText("");
+        jPanel6.add(txtDataVencimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 150, -1));
+
+        cmbId.setEditable(true);
+        cmbId.setEnabled(false);
+        jPanel6.add(cmbId, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 410, 80, -1));
 
         jTabbedPane1.addTab("Dados da fatura", jPanel6);
 
@@ -1172,9 +1179,8 @@ public class Novo_evento extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1195,13 +1201,6 @@ public class Novo_evento extends javax.swing.JDialog {
         atualizarComboCliente();
         atualizarTabelaEquipe();
         if (objetoOrcamento != null) {
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-//            Date date = null;
-//            try {
-//                date = dateFormat.parse(objetoOrcamento.getDataHorario() + "");
-//            } catch (ParseException ex) {
-//                Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
-//            }
             cmbCliente.setSelectedItem(objetoOrcamento.getIdCliente());
             cmbTipoEvento.setSelectedItem(objetoOrcamento.getTipo());
             lblNumeroConvidados.setText(objetoOrcamento.getConvidados() + "");
@@ -1214,87 +1213,94 @@ public class Novo_evento extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
+        objetoPacote = new entity.Pacote();
 
-//        List<entity.Pacote> pacotes = new ArrayList();
-//        if (objetoPacote == null) {
-//            objetoPacote = new entity.Pacote();
-//        }
-//        linhas = modelProd.getRowCount();
-//        for (int i = 0; i < modelProd.getRowCount(); i++) {
-////            if (objetoPacote == null) objetoPacote = new entity.Pacote();
-//            int coluna = 0;
-//            objetoPacote.setNomeProduto(modelProd.getValueAt(i, coluna) + "");
-//            coluna++;
-//            objetoPacote.setQtdProduto(Integer.parseInt(modelProd.getValueAt(i, coluna) + ""));
-//            coluna = 0;
-//            objetoPacote.setNomeFuncionario(modelFunc.getValueAt(i, coluna) + "");
-//            coluna++;
-//            objetoPacote.setFuncaoFuncionario(modelFunc.getValueAt(i, coluna) + "");
-//            pacotes.add(objetoPacote);
-//
-//            objetoPacote.setOrcamentoId(objetoOrcamento);
-//            objetoOrcamento.setPacotes(Arrays.asList(objetoPacote));
-            
-//              new PacoteDAO().inserir(objetoPacote);
-
-//            objetoOrcamento.setPacotes(pacotes); 
-//                objetoPacote = null;
-//            }
-//        }
-
+        for (int i = 0, linha = 0; i < modelProd.getRowCount(); i++, linha++) {
+            objetoPacote.setNomeProduto(modelProd.getValueAt(linha, 0) + "");
+            objetoPacote.setQtdProduto(Integer.parseInt(modelProd.getValueAt(linha, 1) + ""));
+            linha = 0;
+            if(i < modelFunc.getRowCount()){
+                objetoPacote.setNomeFuncionario(modelFunc.getValueAt(i, 0) + "");
+                objetoPacote.setFuncaoFuncionario(modelFunc.getValueAt(i, 1) + "");
+                objetoPacote.setOrcamentoIdp((Orcamento) cmbOrcamento.getSelectedItem());
+                objetoPacote.setIdGambiarra(Integer.parseInt(cmbOrcamento.getSelectedItem() + ""));
+            }
+            new PacoteDAO().inserir(objetoPacote);
+        }
         JOptionPane.showMessageDialog(this, "Salvo com sucesso", "Atenção", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnFaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFaturaActionPerformed
-//        DefaultTableModel model = (DefaultTableModel) table.getModel();
-//        model.addRow(new Object[]{});
-//        ButtonColumn buttonColumn = new ButtonColumn(table, 8);
-//        
         objetoLancamento = new entity.Lancamento();
         int parcelas = Integer.parseInt(txtParcelas.getText());
-        Date hoje = Calendar.getInstance().getTime();
         
-        for (int i = 0; i < parcelas ; i++) {
+        Date hoje = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        Date date = null;
+        try {
+            date = dateFormat.parse(txtDataVencimento.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(Novo_evento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (int i = 1; i <= parcelas; i++) {
             objetoLancamento.setParcela(i);
             objetoLancamento.setAbertura(hoje + "");
-            objetoLancamento.setVencimento(txtDataVencimento.getText());
+            objetoLancamento.setVencimento(date);
             objetoLancamento.setTipoLancamento(cmbPagamento.getSelectedItem() + "");
             objetoLancamento.setStatusLancamento("Em andamento");
             objetoLancamento.setValorEntrada(Double.parseDouble(txtValorParcela.getText()));
             objetoLancamento.setOrcamentoId((Orcamento) cmbOrcamento.getSelectedItem());
+            objetoLancamento.setIl(Integer.parseInt(cmbId.getSelectedItem() + ""));
 
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, 1);
+            date = cal.getTime();
+            
             new dao.LancamentoDAO().inserir(objetoLancamento);
         }
-
+        
         atualizarLancamento();
+        
+//        modelLanc = (DefaultTableModel) table.getModel();
+//        for (int i = 0; i < modelLanc.getRowCount() ; i++) {
+//            if(table.getValueAt(i, 2) != cmbId.getSelectedItem()) modelLanc.removeRow(i);
+//        }
     }//GEN-LAST:event_btnFaturaActionPerformed
 
     private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
-        if(objetoLancamento == null) objetoLancamento = new entity.Lancamento();
+        Date hoje = Calendar.getInstance().getTime();
         
-        objetoLancamento.setParcela(1);
-        objetoLancamento.setAbertura(lblData1.getText());
-        objetoLancamento.setVencimento("N/A");
+        if (objetoLancamento == null) {
+            objetoLancamento = new entity.Lancamento();
+        }
+
+        objetoLancamento.setParcela(0);
+        objetoLancamento.setAbertura(hoje + "");
+        objetoLancamento.setVencimento(null);
         objetoLancamento.setTipoLancamento("Cartão");
         objetoLancamento.setStatusLancamento("OK");
         objetoLancamento.setValorEntrada(Double.parseDouble(txtValorEntrada.getText()));
         objetoLancamento.setOrcamentoId((Orcamento) cmbOrcamento.getSelectedItem());
-            
-        if(objetoLancamento == null) new dao.LancamentoDAO().inserir(objetoLancamento);
-        else new dao.LancamentoDAO().editar(objetoLancamento);
-        
+        objetoLancamento.setIl(Integer.parseInt(cmbId.getSelectedItem() + ""));
+
+        if (objetoLancamento == null) {
+            new dao.LancamentoDAO().inserir(objetoLancamento);
+        } else {
+            new dao.LancamentoDAO().editar(objetoLancamento);
+        }
+
         double entrada = Double.parseDouble(txtValorEntrada.getText());
         double subtotal = Double.parseDouble(txtSubtotal.getText());
         txtSubtotal.setText(subtotal - entrada + "");
+              
         atualizarLancamento();
+        
+//        for (int i = 0; i < table.getModel().getRowCount() ; i++) {
+//            if(table.getModel().getValueAt(i, 2) != cmbId.getSelectedItem()) table.removeRowSelectionInterval(i, i+1);
+//        }
     }//GEN-LAST:event_btnInserirActionPerformed
-
-    private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximoActionPerformed
-
-            
-        jTabbedPane1.setSelectedIndex(1);
-    }//GEN-LAST:event_btnProximoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
@@ -1394,33 +1400,30 @@ public class Novo_evento extends javax.swing.JDialog {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         modelProd = (DefaultTableModel) tblItemIncluido.getModel();
 
-        if(tblItemIncluido.getSelectedRowCount() == 1) modelProd.removeRow(tblItemIncluido.getSelectedRow());
+        if (tblItemIncluido.getSelectedRowCount() == 1)
+            modelProd.removeRow(tblItemIncluido.getSelectedRow());
     }//GEN-LAST:event_btnExcluirActionPerformed
-
-    private void btnSomarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSomarActionPerformed
-        int qtd = Integer.parseInt(txtQtdProd.getText());
-        double preco = Double.parseDouble(txtValorProd.getText());
-        txtPrecoFinalProd.setText(qtd * preco + "");
-    }//GEN-LAST:event_btnSomarActionPerformed
 
     private void btnProxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProxActionPerformed
         double salario = 0;
 
-        for (int i = 0; i < tblItemIncluido.getRowCount() ; i++) {
+        for (int i = 0; i < tblItemIncluido.getRowCount(); i++) {
             salario += Double.parseDouble(modelProd.getValueAt(i, 3) + "");
         }
         txtValorItens.setText(salario + "");
-        
+
         jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_btnProxActionPerformed
 
     private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
         modelFunc = (DefaultTableModel) tblFuncIncluido.getModel();
 
-        if(tblFuncIncluido.getSelectedRowCount() == 1) modelFunc.removeRow(tblFuncIncluido.getSelectedRow());
-    }                                          
+        if (tblFuncIncluido.getSelectedRowCount() == 1) {
+            modelFunc.removeRow(tblFuncIncluido.getSelectedRow());
+        }
+    }
 
-    private void btnIncluFuncActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void btnIncluFuncActionPerformed(java.awt.event.ActionEvent evt) {
     }//GEN-LAST:event_btnExcluir1ActionPerformed
 
     private void btnIncluirFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirFuncActionPerformed
@@ -1433,7 +1436,7 @@ public class Novo_evento extends javax.swing.JDialog {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         double salario = 0;
 
-        for (int i = 0; i < tblFuncIncluido.getRowCount() ; i++) {
+        for (int i = 0; i < tblFuncIncluido.getRowCount(); i++) {
             salario += Double.parseDouble(modelFunc.getValueAt(i, 3) + "");
         }
         txtValorEquipe.setText(salario + "");
@@ -1443,22 +1446,12 @@ public class Novo_evento extends javax.swing.JDialog {
         jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-        double valorServico = Double.parseDouble(txtValorServico.getText());
-        double valorItens = Double.parseDouble(txtValorItens.getText());
-        double valorEquipe = Double.parseDouble(txtValorEquipe.getText());
-        double valorDesconto = Double.parseDouble(txtValorDesconto.getText());
-        
-        double valorFinal = (valorServico + valorItens + valorEquipe - valorDesconto);
-        txtValorFinal.setText(valorFinal + "");
-    }//GEN-LAST:event_btnCalcularActionPerformed
-
     private void btnProxOrcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProxOrcActionPerformed
-                if (objetoOrcamento == null) {
+        if (objetoOrcamento == null) {
             objetoOrcamento = new Orcamento();
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = null;
         try {
             date = dateFormat.parse(lblData1.getText() + " " + lblHoraroi.getText());
@@ -1475,34 +1468,93 @@ public class Novo_evento extends javax.swing.JDialog {
         objetoOrcamento.setEndereco(lblEndereco.getText());
         objetoOrcamento.setDescricao(lblDescricao.getText());
         objetoOrcamento.setValorFinal(Double.parseDouble(txtValorFinal.getText()));
+        objetoOrcamento.setValorEquipe(Double.parseDouble(txtValorEquipe.getText()));
         objetoOrcamento.setValorServico(Double.parseDouble(txtValorServico.getText()));
         objetoOrcamento.setDeconto(Double.parseDouble(txtValorDesconto.getText()));
-        
-        
-//            if (objetoPacote == null) {
-            if (objetoOrcamento == null) {
-                new OrcamentoDAO().inserir(objetoOrcamento);
-            } else {
-                new OrcamentoDAO().editar(objetoOrcamento);
-            }
-        
+
+        if (objetoOrcamento == null) {
+            new OrcamentoDAO().inserir(objetoOrcamento);
+        } else {
+            new OrcamentoDAO().editar(objetoOrcamento);
+        }
+
         txtValorOriginal.setText(txtValorFinal.getText());
-        cmbCliente1.setSelectedItem(objetoOrcamento.getIdCliente() + "");
+        cmbCliente1.setSelectedItem(cmbCliente.getSelectedItem());
         txtSubtotal.setText(txtValorFinal.getText());
-        
+        equipe = Double.parseDouble(txtValorEquipe.getText());
+      
         atualizarOrcamento();
         jTabbedPane1.setSelectedIndex(4);
     }//GEN-LAST:event_btnProxOrcActionPerformed
 
-    private void btnCalcular1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcular1ActionPerformed
-        double desconto = Double.parseDouble(txtDescontoParcela.getText());
-        double parcelas = Double.parseDouble(txtParcelas.getText());
-        double subtotal = Double.parseDouble(txtSubtotal.getText());
+    private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximoActionPerformed
+        jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_btnProximoActionPerformed
 
-        txtValorParcela.setText(Math.round((subtotal - desconto)/parcelas) + "");
-        double valorParcela = Double.parseDouble(txtValorParcela.getText());
-        txtTotalParcela.setText(Math.round(valorParcela * parcelas) + "");
-    }//GEN-LAST:event_btnCalcular1ActionPerformed
+    private void txtQtdProdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQtdProdKeyReleased
+        // TODO add your handling code here:
+        try {
+            int qtd = Integer.parseInt(txtQtdProd.getText());
+            double preco = Double.parseDouble(txtValorProd.getText());
+            txtPrecoFinalProd.setText((qtd * preco )+ "");
+        } catch (Exception ex) {
+            txtPrecoFinalProd.setText("");
+        }
+    }//GEN-LAST:event_txtQtdProdKeyReleased
+
+    private void txtValorServicoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtValorServicoKeyReleased
+        try{
+            double valorServico = Double.parseDouble(txtValorServico.getText());
+            double valorItens = Double.parseDouble(txtValorItens.getText());
+            double valorEquipe = Double.parseDouble(txtValorEquipe.getText());
+
+            double valorFinal = (valorServico + valorItens + valorEquipe);
+            txtValorFinal.setText(valorFinal + "");
+        } catch (Exception ex){
+            txtValorFinal.setText("");
+        }
+    }//GEN-LAST:event_txtValorServicoKeyReleased
+
+    private void txtValorDescontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtValorDescontoKeyReleased
+        try{
+            double valorServico = Double.parseDouble(txtValorServico.getText());
+            double valorItens = Double.parseDouble(txtValorItens.getText());
+            double valorEquipe = Double.parseDouble(txtValorEquipe.getText());
+            double desconto = Double.parseDouble(txtValorDesconto.getText());
+
+            double valorFinal = (valorServico + valorItens + valorEquipe - desconto);
+            txtValorFinal.setText(valorFinal + "");
+        } catch (Exception ex){
+            txtValorFinal.setText("");
+        }
+    }//GEN-LAST:event_txtValorDescontoKeyReleased
+
+    private void txtParcelasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtParcelasKeyReleased
+        try {
+            double parcelas = Double.parseDouble(txtParcelas.getText());
+            double subtotal = Double.parseDouble(txtSubtotal.getText());
+
+            txtValorParcela.setText(Math.round(subtotal/ parcelas) + "");
+            double valorParcela = Double.parseDouble(txtValorParcela.getText());
+            txtTotalParcela.setText(Math.round(valorParcela * parcelas) + "");
+        } catch (Exception e) {
+            txtTotalParcela.setText("");
+        }
+    }//GEN-LAST:event_txtParcelasKeyReleased
+
+    private void txtDescontoParcelaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescontoParcelaKeyReleased
+        try {
+            double desconto = Double.parseDouble(txtDescontoParcela.getText());
+            double parcelas = Double.parseDouble(txtParcelas.getText());
+            double subtotal = Double.parseDouble(txtSubtotal.getText());
+
+            txtValorParcela.setText(Math.round((subtotal - desconto)/ parcelas) + "");
+            double valorParcela = Double.parseDouble(txtValorParcela.getText());
+            txtTotalParcela.setText(Math.round(valorParcela * parcelas) + "");
+        } catch (Exception e) {
+            txtTotalParcela.setText("");
+        }
+    }//GEN-LAST:event_txtDescontoParcelaKeyReleased
 
     private void atualizarComboCliente() {
         if (clienteSelecionado != null) {
@@ -1511,7 +1563,7 @@ public class Novo_evento extends javax.swing.JDialog {
             try {
                 List<entity.Cliente> listaCliente = new ClienteDAO().selecionarTodos();
                 cmbCliente.setModel(new DefaultComboBoxModel<entity.Cliente>(listaCliente.toArray(new entity.Cliente[listaCliente.size()])));
-                cmbCliente1.setModel(new DefaultComboBoxModel<entity.Cliente>(listaCliente.toArray(new entity.Cliente[listaCliente.size()])));
+                //cmbCliente1.setModel(new DefaultComboBoxModel<entity.Cliente>(listaCliente.toArray(new entity.Cliente[listaCliente.size()])));
             } catch (Exception ex) {
 
             }
@@ -1521,23 +1573,23 @@ public class Novo_evento extends javax.swing.JDialog {
 
     private void atualizarLancamento() {
         try {
-            List<entity.Lancamento> listaProdutos = new dao.LancamentoDAO().selecionarTodos();
-            TableModel tableModelProdutos = TableModelCreator.createTableModel(entity.Lancamento.class, listaProdutos, null);
-            table.setModel(tableModelProdutos);
+            List<entity.Lancamento> listaProdutos = new dao.LancamentoDAO().findOrcamentoIdLanc(Integer.parseInt(cmbId.getSelectedItem() + ""));
+            table.setModel(utils.TableModelCreator.createTableModel(entity.Lancamento.class, listaProdutos, null));
         } catch (Exception ex) {
 
         }
     }
-    
+
     private void atualizarOrcamento() {
         try {
-            List<Orcamento> results = new OrcamentoDAO().selecionarTodos();
+            List<Orcamento> results = new OrcamentoDAO().findOrcamentoId();
             cmbOrcamento.setModel(new DefaultComboBoxModel<entity.Orcamento>(results.toArray(new entity.Orcamento[results.size()])));
+            cmbId.setSelectedItem(cmbOrcamento.getSelectedItem().toString());
         } catch (Exception ex) {
 
         }
     }
-    
+
     private void atualizarTabelaProduto() {
         try {
             List<Produto> results = new ProdutoDAO().selecionarTodos();
@@ -1602,8 +1654,6 @@ public class Novo_evento extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCalcular;
-    private javax.swing.JButton btnCalcular1;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnExcluir1;
@@ -1616,10 +1666,10 @@ public class Novo_evento extends javax.swing.JDialog {
     private javax.swing.JButton btnProxOrc;
     private javax.swing.JButton btnProximo;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton btnSomar;
     private javax.swing.JRadioButton cmbAlimenticio;
     private javax.swing.JComboBox<entity.Cliente> cmbCliente;
-    private javax.swing.JComboBox<entity.Cliente> cmbCliente1;
+    private javax.swing.JComboBox<String> cmbCliente1;
+    private javax.swing.JComboBox<String> cmbId;
     private javax.swing.JComboBox<String> cmbLocal;
     private javax.swing.JRadioButton cmbMaterial;
     private javax.swing.JComboBox<entity.Orcamento> cmbOrcamento;
@@ -1687,11 +1737,11 @@ public class Novo_evento extends javax.swing.JDialog {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField lblData1;
+    private javax.swing.JFormattedTextField lblData1;
     private javax.swing.JTextField lblDescricao;
     private javax.swing.JTextField lblDias;
     private javax.swing.JTextField lblEndereco;
-    private javax.swing.JTextField lblHoraroi;
+    private javax.swing.JFormattedTextField lblHoraroi;
     private javax.swing.JTextField lblNumeroConvidados;
     private javax.swing.JTable table;
     private javax.swing.JTable tblFuncIncluido;
@@ -1699,7 +1749,7 @@ public class Novo_evento extends javax.swing.JDialog {
     private javax.swing.JTable tblItem;
     private javax.swing.JTable tblItemIncluido;
     private javax.swing.JTextField txtCelFunc;
-    private javax.swing.JTextField txtDataVencimento;
+    private javax.swing.JFormattedTextField txtDataVencimento;
     private javax.swing.JTextField txtDescontoParcela;
     private javax.swing.JTextField txtFuncaoFunc;
     private javax.swing.JTextField txtNomeFunc;

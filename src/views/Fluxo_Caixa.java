@@ -5,6 +5,18 @@
  */
 package views;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Gustavo
@@ -14,9 +26,14 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
     /**
      * Creates new form Fluxo_Caixa
      */
-    public Fluxo_Caixa() {
+    private entity.Orcamento objetoOrcamento;
+    private DefaultTableModel model;
+    
+    public Fluxo_Caixa(entity.Orcamento objetoOrcamento) {
         initComponents();
+        this.objetoOrcamento = objetoOrcamento;
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,6 +52,11 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel1.setText("Fluxo de Caixa");
@@ -42,9 +64,9 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"2021", "Jan", null, null, null, null},
-                {"2021", "Fev", null, null, null, null},
+                {"2021", "Fev", "1700", "370", "1330", "4,5%"},
                 {"2021", "Mar", null, null, null, null},
-                {"2021", "Abr", null, null, null, null},
+                {"2021", "Abr", "4500", "790", "3710", "5,7%"},
                 {"2021", "Mai", null, null, null, null},
                 {"2021", "Jun", null, null, null, null},
                 {"2021", "Jul", null, null, null, null},
@@ -110,6 +132,31 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        if(objetoOrcamento != null) atualizarValores();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void atualizarValores(){
+        Date date = new Date();
+        date = objetoOrcamento.getDataHorario();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int mes = cal.get(Calendar.MONTH);
+        model = (DefaultTableModel) jTable1.getModel();
+        
+        switch (mes){
+            case 6:
+                double servico = objetoOrcamento.getValorServico();
+                double equipe = objetoOrcamento.getValorEquipe();
+                double media = servico/equipe;
+                model.setValueAt(servico, 6, 2);
+                model.setValueAt(equipe, 6, 3);
+                model.setValueAt(servico-equipe, 6, 4);
+                model.setValueAt(new DecimalFormat("0.0").format(media) + "%", 6, 5);
+        }
+    }
+    
+        
     /**
      * @param args the command line arguments
      */
@@ -140,7 +187,7 @@ public class Fluxo_Caixa extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Fluxo_Caixa().setVisible(true);
+                new Fluxo_Caixa(null).setVisible(true);
             }
         });
     }

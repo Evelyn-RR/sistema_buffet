@@ -3,11 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/entity/Pacote.java</file>
             <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Fluxo_Caixa.java</file>
             <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Novo_evento.java</file>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Clientes.java</file>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/dao/GenericDAO.java</file>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Produto.java</file>
             <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Evento.java</file>
-            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/entity/Lancamento.java</file>
-            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/entity/Orcamento.java</file>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Receitas_Despesas.java</file>
+            <file>file:/C:/Users/gusta/OneDrive/Documentos/Repositórios/sistema_buffet/src/views/Cadastro_produto.java</file>
         </group>
     </open-files>
 </project-private>

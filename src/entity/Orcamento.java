@@ -36,7 +36,7 @@ import javax.persistence.TemporalType;
 @Table(name = "orcamento")
 @NamedQueries({
     @NamedQuery(name = "Orcamento.findAll", query = "SELECT o FROM Orcamento o"),
-    @NamedQuery(name = "Orcamento.findById", query = "SELECT o FROM Orcamento o WHERE o.id = :id"),
+    @NamedQuery(name = "Orcamento.findById", query = "SELECT o FROM Orcamento o ORDER BY o.id DESC"),
     @NamedQuery(name = "Orcamento.findByTipo", query = "SELECT o FROM Orcamento o WHERE o.tipo = :tipo"),
     @NamedQuery(name = "Orcamento.findByConvidados", query = "SELECT o FROM Orcamento o WHERE o.convidados = :convidados"),
     @NamedQuery(name = "Orcamento.findByDataHorario", query = "SELECT o FROM Orcamento o WHERE o.dataHorario = :dataHorario"),
@@ -45,17 +45,19 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Orcamento.findOrcamento", query = "SELECT o.tipo, o.duracao FROM Orcamento o WHERE o.descricao = :descricao"),
     @NamedQuery(name = "Orcamento.findByDuracao", query = "SELECT o FROM Orcamento o WHERE o.duracao = :duracao")})
 public class Orcamento implements Serializable {
-
     @Column(name = "convidados")
     private Integer convidados;
+    
     @OneToMany(mappedBy = "orcamentoId")
-    private Collection<Lancamento> lancamentoCollection;
-    @OneToMany(mappedBy = "orcamentoId", orphanRemoval=true, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "orcamento_id")
-    private List<Pacote> pacotes;
+    private List<Lancamento> lancamentoCollection;
+    
+    @OneToMany(mappedBy = "orcamentoIdp")
+    private List<Pacote> pacoteCollection;
     
     @Column(name = "valor_servico")
     private Double valorServico;
+    @Column(name = "valor_equipe")
+    private Double valorEquipe;
     @Column(name = "valor_final")
     private Double valorFinal;
     @Column(name = "deconto")
@@ -100,16 +102,24 @@ public class Orcamento implements Serializable {
         this.convidados = convidados;
     }
 
-    public List<Pacote> getPacotes() {
-        return pacotes;
-    }
-
-    public void setPacotes(List<Pacote> pacotes) {
-        this.pacotes = pacotes;
-    }
-
     public Cliente getIdCliente() {
         return cliente;
+    }
+
+    public Collection<Pacote> getPacoteCollection() {
+        return pacoteCollection;
+    }
+
+    public Double getValorEquipe() {
+        return valorEquipe;
+    }
+
+    public void setValorEquipe(Double valorEquipe) {
+        this.valorEquipe = valorEquipe;
+    }
+
+    public void setPacoteCollection(List<Pacote> pacoteCollection) {
+        this.pacoteCollection = pacoteCollection;
     }
 
     public Double getValorServico() {
@@ -230,11 +240,11 @@ public class Orcamento implements Serializable {
         this.convidados = convidados;
     }
 
-    public Collection<Lancamento> getLancamentoCollection() {
+    public List<Lancamento> getLancamentoCollection() {
         return lancamentoCollection;
     }
 
-    public void setLancamentoCollection(Collection<Lancamento> lancamentoCollection) {
+    public void setLancamentoCollection(List<Lancamento> lancamentoCollection) {
         this.lancamentoCollection = lancamentoCollection;
     }
 

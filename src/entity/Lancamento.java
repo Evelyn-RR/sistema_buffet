@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -27,22 +30,14 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Lancamento.findAll", query = "SELECT l FROM Lancamento l"),
     @NamedQuery(name = "Lancamento.findByIdLancamento", query = "SELECT l FROM Lancamento l WHERE l.idLancamento = :idLancamento"),
-    @NamedQuery(name = "Lancamento.findByOrcamentoId", query = "SELECT l FROM Lancamento l WHERE l.orcamentoId = :orcamentoId"),
+    @NamedQuery(name = "Lancamento.findByIl", query = "SELECT l FROM Lancamento l WHERE l.il = :il"),
     @NamedQuery(name = "Lancamento.findByParcela", query = "SELECT l FROM Lancamento l WHERE l.parcela = :parcela"),
     @NamedQuery(name = "Lancamento.findByAbertura", query = "SELECT l FROM Lancamento l WHERE l.abertura = :abertura"),
     @NamedQuery(name = "Lancamento.findByVencimento", query = "SELECT l FROM Lancamento l WHERE l.vencimento = :vencimento"),
     @NamedQuery(name = "Lancamento.findByTipoLancamento", query = "SELECT l FROM Lancamento l WHERE l.tipoLancamento = :tipoLancamento"),
-    @NamedQuery(name = "Lancamento.findByStatusLancamento", query = "SELECT l FROM Lancamento l WHERE l.statusLancamento = :statusLancamento")})
+    @NamedQuery(name = "Lancamento.findByStatusLancamento", query = "SELECT l FROM Lancamento l WHERE l.statusLancamento = :statusLancamento"),
+    @NamedQuery(name = "Lancamento.findByValorEntrada", query = "SELECT l FROM Lancamento l WHERE l.valorEntrada = :valorEntrada")})
 public class Lancamento implements Serializable {
-
-    @JoinColumn(name = "orcamento_id")
-    @ManyToOne
-    private Orcamento orcamentoId;
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "valor_entrada")
-    private Double valorEntrada;
-    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,16 +45,25 @@ public class Lancamento implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_lancamento")
     private Integer idLancamento;
+    @Column(name = "il")
+    private Integer il;
     @Column(name = "parcela")
     private Integer parcela;
     @Column(name = "abertura")
     private String abertura;
     @Column(name = "vencimento")
-    private String vencimento;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date vencimento;
     @Column(name = "tipo_lancamento")
     private String tipoLancamento;
     @Column(name = "status_lancamento")
     private String statusLancamento;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "valor_entrada")
+    private Double valorEntrada;
+    @JoinColumn(name = "orcamento_id", referencedColumnName = "id")
+    @ManyToOne
+    private Orcamento orcamentoId;
 
     public Lancamento() {
     }
@@ -74,6 +78,14 @@ public class Lancamento implements Serializable {
 
     public void setIdLancamento(Integer idLancamento) {
         this.idLancamento = idLancamento;
+    }
+
+    public Integer getIl() {
+        return il;
+    }
+
+    public void setIl(Integer il) {
+        this.il = il;
     }
 
     public Integer getParcela() {
@@ -92,11 +104,11 @@ public class Lancamento implements Serializable {
         this.abertura = abertura;
     }
 
-    public String getVencimento() {
+    public Date getVencimento() {
         return vencimento;
     }
 
-    public void setVencimento(String vencimento) {
+    public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
     }
 
@@ -114,6 +126,22 @@ public class Lancamento implements Serializable {
 
     public void setStatusLancamento(String statusLancamento) {
         this.statusLancamento = statusLancamento;
+    }
+
+    public Double getValorEntrada() {
+        return valorEntrada;
+    }
+
+    public void setValorEntrada(Double valorEntrada) {
+        this.valorEntrada = valorEntrada;
+    }
+
+    public Orcamento getOrcamentoId() {
+        return orcamentoId;
+    }
+
+    public void setOrcamentoId(Orcamento orcamentoId) {
+        this.orcamentoId = orcamentoId;
     }
 
     @Override
@@ -138,23 +166,7 @@ public class Lancamento implements Serializable {
 
     @Override
     public String toString() {
-        return "agenda.java.edu.avans.library.businesslogic.Lancamento[ idLancamento=" + idLancamento + " ]";
-    }
-
-    public Double getValorEntrada() {
-        return valorEntrada;
-    }
-
-    public void setValorEntrada(Double valorEntrada) {
-        this.valorEntrada = valorEntrada;
-    }
-
-    public Orcamento getOrcamentoId() {
-        return orcamentoId;
-    }
-
-    public void setOrcamentoId(Orcamento orcamentoId) {
-        this.orcamentoId = orcamentoId;
+        return "entity.Lancamento[ idLancamento=" + idLancamento + " ]";
     }
     
 }

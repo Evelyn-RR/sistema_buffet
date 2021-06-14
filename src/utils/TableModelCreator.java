@@ -5,7 +5,7 @@
  */
 package utils;
 
-import entity.Produto;
+import entity.Lancamento;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -26,28 +26,49 @@ public class TableModelCreator {
             BeanInfo beanInfo = Introspector.getBeanInfo(beanClass);
             List<String> columns = new ArrayList<>();
             List<Method> getters = new ArrayList<>();
+            
+            if (columnsVisible != null) {
+                for (String column : columnsVisible) {
+                    String name = column;
 
-            for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
-                String name = pd.getName();
-                
-                if (name.equals("class")) {
-                    continue;
-                }
-                if (columnsVisible != null) {
-                    if (!columnsVisible.contains(name)) {
-                        continue;
+                    name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+                    String[] s = name.split("(?=\\p{Upper})");
+                    String displayName = "";
+                    for (String s1 : s) {
+                        displayName += s1 + " ";
+                    }
+
+                    columns.add(displayName);
+                    for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
+                        if (pd.getName().toLowerCase().equals(name.toLowerCase())) {
+                            Method m = pd.getReadMethod();
+                            getters.add(m);
+                        }
                     }
                 }
-                name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-                String[] s = name.split("(?=\\p{Upper})");
-                String displayName = "";
-                for (String s1 : s) {
-                    displayName += s1 + " ";
-                }
+            } else {
+                for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
+                    String name = pd.getName();
 
-                columns.add(displayName);
-                Method m = pd.getReadMethod();
-                getters.add(m);
+                    if (name.equals("class")) {
+                        continue;
+                    }
+                    if (columnsVisible != null) {
+                        if (!columnsVisible.contains(name)) {
+                            continue;
+                        }
+                    }
+                    name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+                    String[] s = name.split("(?=\\p{Upper})");
+                    String displayName = "";
+                    for (String s1 : s) {
+                        displayName += s1 + " ";
+                    }
+
+                    columns.add(displayName);
+                    Method m = pd.getReadMethod();
+                    getters.add(m);
+                }
             }
 
             TableModel model = new AbstractTableModel() {
@@ -81,6 +102,5 @@ public class TableModelCreator {
             throw new RuntimeException(e);
         }
     }
-
     
 }

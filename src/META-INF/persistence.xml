@@ -14,6 +14,7 @@
     <class>entity.Evento</class>
     <class>entity.Pacote</class>
     <class>entity.Lancamento</class>
+    <class>agenda.java.edu.avans.library.businesslogic.Lancamento</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sistemabuffet?useTimezone=true&amp;serverTimezone=UTC "/>
       <property name="javax.persistence.jdbc.user" value="root"/>

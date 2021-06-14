@@ -56,7 +56,7 @@ public class Eventos_finalizados extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome do cliente", "Endereço", "Data do Evento", "Hora", "Tipo de Evento", "N° de convidados"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);

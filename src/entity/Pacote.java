@@ -6,9 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,17 +27,12 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Pacote.findAll", query = "SELECT p FROM Pacote p"),
     @NamedQuery(name = "Pacote.findByIdEvento", query = "SELECT p FROM Pacote p WHERE p.idEvento = :idEvento"),
-    @NamedQuery(name = "Pacote.findByOrcamentoId", query = "SELECT p FROM Pacote p WHERE p.orcamentoId like :orcamentoId"),
+    @NamedQuery(name = "Pacote.findByIdGambiarra", query = "SELECT p FROM Pacote p WHERE p.ip like :ip"),
     @NamedQuery(name = "Pacote.findByNomeProduto", query = "SELECT p FROM Pacote p WHERE p.nomeProduto = :nomeProduto"),
     @NamedQuery(name = "Pacote.findByQtdProduto", query = "SELECT p FROM Pacote p WHERE p.qtdProduto = :qtdProduto"),
     @NamedQuery(name = "Pacote.findByNomeFuncionario", query = "SELECT p FROM Pacote p WHERE p.nomeFuncionario = :nomeFuncionario"),
     @NamedQuery(name = "Pacote.findByFuncaoFuncionario", query = "SELECT p FROM Pacote p WHERE p.funcaoFuncionario = :funcaoFuncionario")})
 public class Pacote implements Serializable {
-
-    
-    @ManyToOne
-    @JoinColumn(name = "orcamentoId", referencedColumnName = "id", nullable = false)
-    private Orcamento orcamentoId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,6 +40,8 @@ public class Pacote implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_evento")
     private Integer idEvento;
+    @Column(name = "ip")
+    private Integer ip;
     @Column(name = "nome_produto")
     private String nomeProduto;
     @Column(name = "qtd_produto")
@@ -55,8 +49,10 @@ public class Pacote implements Serializable {
     @Column(name = "nome_funcionario")
     private String nomeFuncionario;
     @Column(name = "funcao_funcionario")
-    private String funcaoFuncionario;   
-    
+    private String funcaoFuncionario;
+    @JoinColumn(name = "orcamento_idp", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Orcamento orcamentoIdp;
 
     public Pacote() {
     }
@@ -71,6 +67,14 @@ public class Pacote implements Serializable {
 
     public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
+    }
+
+    public Integer getIdGambiarra() {
+        return ip;
+    }
+
+    public void setIdGambiarra(Integer ip) {
+        this.ip = ip;
     }
 
     public String getNomeProduto() {
@@ -105,6 +109,14 @@ public class Pacote implements Serializable {
         this.funcaoFuncionario = funcaoFuncionario;
     }
 
+    public Orcamento getOrcamentoIdp() {
+        return orcamentoIdp;
+    }
+
+    public void setOrcamentoIdp(Orcamento orcamentoIdp) {
+        this.orcamentoIdp = orcamentoIdp;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -127,15 +139,7 @@ public class Pacote implements Serializable {
 
     @Override
     public String toString() {
-        return "agenda.java.edu.avans.library.businesslogic.Pacote[ idEvento=" + idEvento + " ]";
+        return "entity.Pacote[ idEvento=" + idEvento + " ]";
     }
-
-    public Orcamento getOrcamentoId() {
-        return orcamentoId;
-    }
-
-    public void setOrcamentoId(Orcamento orcamentoId) {
-        this.orcamentoId = orcamentoId;
-    }
-
+    
 }

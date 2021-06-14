@@ -230,7 +230,7 @@ public class Cadastro_produto extends javax.swing.JDialog {
         if(objetoProduto != null){
             lblProduto.setText(objetoProduto.getNomeProduto());
             cmbTipo.setSelectedItem(objetoProduto.getTipo());
-            cmbUnidade.setSelectedItem(objetoProduto.getUnidadeMedida());
+            cmbUnidade.setSelectedItem(objetoProduto.getQtdEstoque());
             lblEstoque.setText(objetoProduto.getUnidadeMedida());
             lblPreco.setText(objetoProduto.getValorProduto().toString());
         }

@@ -38,7 +38,7 @@ public class Header implements IEventHandler {
             canvas.setFontSize(15);
 
             //LOGO
-            URL urlImage = this.getClass().getResource("/img/java2.png");
+            URL urlImage = this.getClass().getResource("/img/logo.png");
             ImageData data = ImageDataFactory.create(urlImage);
             Image image = new Image(data);
             image.setWidth(90);

@@ -8,6 +8,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowActivated"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -110,10 +113,62 @@
                   <Data value="Nov"/>
                   <Data value="Dez"/>
                 </Column>
-                <Column editable="true" title="Receita" type="java.lang.Object"/>
-                <Column editable="true" title="Despesa" type="java.lang.Object"/>
-                <Column editable="true" title="Resultado" type="java.lang.Object"/>
-                <Column editable="true" title="M&#xe9;dia" type="java.lang.Object"/>
+                <Column editable="true" title="Receita" type="java.lang.Object">
+                  <Data value="null"/>
+                  <Data value="1700"/>
+                  <Data value="null"/>
+                  <Data value="4500"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                </Column>
+                <Column editable="true" title="Despesa" type="java.lang.Object">
+                  <Data value="null"/>
+                  <Data value="370"/>
+                  <Data value="null"/>
+                  <Data value="790"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                </Column>
+                <Column editable="true" title="Resultado" type="java.lang.Object">
+                  <Data value="null"/>
+                  <Data value="1330"/>
+                  <Data value="null"/>
+                  <Data value="3710"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                </Column>
+                <Column editable="true" title="M&#xe9;dia" type="java.lang.Object">
+                  <Data value="null"/>
+                  <Data value="4,5%"/>
+                  <Data value="null"/>
+                  <Data value="5,7%"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                  <Data value="null"/>
+                </Column>
               </Table>
             </Property>
             <Property name="rowHeight" type="int" value="25"/>

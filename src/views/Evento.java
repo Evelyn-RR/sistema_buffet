@@ -16,6 +16,7 @@ import dao.PacoteDAO;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +57,7 @@ public class Evento extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnConcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEvento = new javax.swing.JTable();
         btnImprimir = new javax.swing.JButton();
@@ -79,12 +80,13 @@ public class Evento extends javax.swing.JFrame {
 
         jTextField5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-selecionado-16.png"))); // NOI18N
-        jButton1.setText("Eventos finalizados");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnConcluir.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnConcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-selecionado-16.png"))); // NOI18N
+        btnConcluir.setText("Concluir Evento");
+        btnConcluir.setEnabled(false);
+        btnConcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnConcluirActionPerformed(evt);
             }
         });
 
@@ -152,42 +154,39 @@ public class Evento extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(btnRegistros)
-                        .addGap(52, 52, 52)
-                        .addComponent(btnImprimir)
-                        .addGap(47, 47, 47)
-                        .addComponent(btnEditar)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnExcluir))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(btnRegistros)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnImprimir)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnEditar)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnExcluir)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnConcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(88, 88, 88))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(50, 50, 50)
-                    .addComponent(jLabel7)
-                    .addContainerGap(437, Short.MAX_VALUE)))
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel7)))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -195,13 +194,9 @@ public class Evento extends javax.swing.JFrame {
                     .addComponent(btnImprimir)
                     .addComponent(btnEditar)
                     .addComponent(btnExcluir)
-                    .addComponent(btnRegistros))
-                .addContainerGap(24, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(56, 56, 56)
-                    .addComponent(jLabel7)
-                    .addContainerGap(445, Short.MAX_VALUE)))
+                    .addComponent(btnRegistros)
+                    .addComponent(btnConcluir))
+                .addGap(58, 58, 58))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -212,17 +207,22 @@ public class Evento extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Eventos_finalizados eventoFinalizado = new Eventos_finalizados();
-        eventoFinalizado.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcluirActionPerformed
+        OrcamentoDAO orcamentodao = new OrcamentoDAO();
+        entity.Orcamento orcamento = orcamentodao.selecionarPorCodigo(idSelecionado);
+        
+        Fluxo_Caixa fluxo = new Fluxo_Caixa(orcamento);
+        fluxo.setVisible(true);
+    }//GEN-LAST:event_btnConcluirActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (idSelecionado > 0) {
@@ -234,7 +234,12 @@ public class Evento extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrosActionPerformed
-        // TODO add your handling code here:
+        if (idSelecionado > 0) {    
+            entity.Lancamento lancamento = new dao.LancamentoDAO().selecionarPorCodigo(idSelecionado);
+            Receitas_Despesas registro = new Receitas_Despesas(lancamento);
+            registro.setVisible(true);
+            atualizarTabela();
+        }
     }//GEN-LAST:event_btnRegistrosActionPerformed
 
     private void tblEventoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventoMouseClicked
@@ -247,11 +252,10 @@ public class Evento extends javax.swing.JFrame {
                 idSelecionado = Integer.parseInt(tabela.getValueAt(linha, i) + "");
                 btnEditar.setEnabled(true);
                 btnExcluir.setEnabled(true);
+                btnConcluir.setEnabled(true);
                 break;
             }
         }
-        
-//        atualizarTabelaProd();
         
     }//GEN-LAST:event_tblEventoMouseClicked
 
@@ -284,18 +288,17 @@ public class Evento extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_btnImprimirActionPerformed
 
-//    private void atualizarTabelaProd() {
-//        entity.Orcamento objetoOrcamento = null;       
+//    private void atualizarTabelaProd() {   
 //        try {
-//            List<entity.Pacote> listaPacotes = objetoOrcamento.getPacotes();
+//            List<entity.Pacote> listaPacotes = new PacoteDAO().findOrcamentoIdPaco(idSelecionado);
 //            TableModel tableModelPacotes = TableModelCreator.createTableModel(entity.Pacote.class, listaPacotes, null);
-//            tblProdutos1.setModel(tableModelPacotes);
+//            tblProduto.setModel(tableModelPacotes);
 //        } catch (Exception ex) {
 //
 //        }
 //    }
     
-        private void abrirPDF(String caminho, String nomeArquivoPDF){
+    private void abrirPDF(String caminho, String nomeArquivoPDF){
         try {
             File arquivo = new File(caminho + "/" + nomeArquivoPDF + ".pdf");
             Desktop.getDesktop().open(arquivo);
@@ -423,11 +426,11 @@ public class Evento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConcluir;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnRegistros;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;

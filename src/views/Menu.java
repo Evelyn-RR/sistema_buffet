@@ -330,12 +330,12 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        Fluxo_Caixa fluxoCaixa = new Fluxo_Caixa();
+        Fluxo_Caixa fluxoCaixa = new Fluxo_Caixa(null);
         fluxoCaixa.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        Receitas_Despesas receitasDespesas = new Receitas_Despesas();
+        Receitas_Despesas receitasDespesas = new Receitas_Despesas(null);
         receitasDespesas.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 

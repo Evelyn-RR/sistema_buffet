@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Orcamento;
 import entity.Produto;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -106,16 +107,22 @@ public class GenericDAO<T> {
         return query.getResultList();
     }
     
-    public List<T> findOrcamento(String tipo) {
-        Query query= getEntityManager().createNamedQuery("Orcamento.findOrcamento");
-        tipo = "%"+tipo+"%";
-        query.setParameter("tipo",tipo);
+    public List<T> findOrcamentoId() {
+        Query query= getEntityManager().createNamedQuery("Orcamento.findById");
         return query.getResultList();
     }
     
-    public List<T> findPacotes(entity.Orcamento orcamentoId) {
-        Query query= getEntityManager().createNamedQuery("Pacote.findByOrcamentoId");
-        query.setParameter("orcamentoId",orcamentoId);
+    public List<T> findOrcamentoIdLanc(Integer il) {
+        //Query query= getEntityManager().createQuery("SELECT l FROM Lancamento l WHERE l.orcamento_id like :orcamentoId");
+        Query query= getEntityManager().createNamedQuery("Lancamento.findByIl");
+        query.setParameter("il", il);
+        return query.getResultList();
+    }
+
+    public List<T> findOrcamentoIdPaco(Integer ip) {
+        //Query query= getEntityManager().createQuery("SELECT l FROM Lancamento l WHERE l.orcamento_id like :orcamentoId");
+        Query query= getEntityManager().createNamedQuery("Pacote.findByIdGambiarra");
+        query.setParameter("ip", ip);
         return query.getResultList();
     }
     

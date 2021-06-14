@@ -5,6 +5,10 @@
  */
 package views;
 
+import java.util.List;
+import javax.swing.table.TableModel;
+import utils.TableModelCreator;
+
 /**
  *
  * @author Gustavo
@@ -14,8 +18,12 @@ public class Receitas_Despesas extends javax.swing.JFrame {
     /**
      * Creates new form Receitas_Despesas
      */
-    public Receitas_Despesas() {
+    
+    private entity.Lancamento objetoLancamento;
+    
+    public Receitas_Despesas(entity.Lancamento objetoLancamento) {
         initComponents();
+        this.objetoLancamento = objetoLancamento;
     }
 
     /**
@@ -32,17 +40,20 @@ public class Receitas_Despesas extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Data de Movimento", "Origem/Destino", "Histórico", "Entradas", "Saída"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -55,14 +66,6 @@ public class Receitas_Despesas extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel1.setText("Receitas e Despesas");
-
-        jRadioButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Receitas");
-
-        jRadioButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jRadioButton2.setSelected(true);
-        jRadioButton2.setText("Despesas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,11 +82,6 @@ public class Receitas_Despesas extends javax.swing.JFrame {
                                 .addGap(254, 254, 254)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(258, 258, 258)
-                                .addComponent(jRadioButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButton2))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -94,25 +92,41 @@ public class Receitas_Despesas extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(40, 40, 40))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        if(objetoLancamento != null){
+            try {
+                List<entity.Lancamento> listaEventos = new dao.LancamentoDAO().findOrcamentoIdLanc(objetoLancamento.getIl());
+                TableModel tableModelEventos = TableModelCreator.createTableModel(entity.Lancamento.class, listaEventos, null);
+                jTable1.setModel(tableModelEventos);
+            } catch (Exception ex) {
+
+            }
+        }
+        else {
+            try {
+                List<entity.Lancamento> listaEventos = new dao.LancamentoDAO().selecionarTodos();
+                TableModel tableModelEventos = TableModelCreator.createTableModel(entity.Lancamento.class, listaEventos, null);
+                jTable1.setModel(tableModelEventos);
+                } catch (Exception ex) {
+            }
+        }
+    }//GEN-LAST:event_formWindowActivated
+   
     /**
      * @param args the command line arguments
      */
@@ -143,7 +157,7 @@ public class Receitas_Despesas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Receitas_Despesas().setVisible(true);
+                new Receitas_Despesas(null).setVisible(true);
             }
         });
     }
@@ -151,8 +165,6 @@ public class Receitas_Despesas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField5;
